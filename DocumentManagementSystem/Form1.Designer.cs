@@ -59,11 +59,12 @@
             pnlSidebar.Dock = DockStyle.Left;
             pnlSidebar.Location = new Point(0, 0);
             pnlSidebar.Name = "pnlSidebar";
-            pnlSidebar.Size = new Size(203, 450);
+            pnlSidebar.Size = new Size(200, 450);
             pnlSidebar.TabIndex = 0;
             // 
             // btnHelp
             // 
+            btnHelp.Font = new Font("Segoe UI", 9F);
             btnHelp.Location = new Point(15, 251);
             btnHelp.Name = "btnHelp";
             btnHelp.Size = new Size(170, 35);
@@ -73,6 +74,7 @@
             // 
             // btnTrash
             // 
+            btnTrash.Font = new Font("Segoe UI", 9F);
             btnTrash.Location = new Point(15, 210);
             btnTrash.Name = "btnTrash";
             btnTrash.Size = new Size(170, 35);
@@ -82,6 +84,7 @@
             // 
             // btnPendingApproval
             // 
+            btnPendingApproval.Font = new Font("Segoe UI", 9F);
             btnPendingApproval.Location = new Point(15, 169);
             btnPendingApproval.Name = "btnPendingApproval";
             btnPendingApproval.Size = new Size(170, 35);
@@ -91,6 +94,7 @@
             // 
             // btnMyDocuments
             // 
+            btnMyDocuments.Font = new Font("Segoe UI", 9F);
             btnMyDocuments.Location = new Point(15, 128);
             btnMyDocuments.Name = "btnMyDocuments";
             btnMyDocuments.Size = new Size(170, 35);
@@ -100,6 +104,7 @@
             // 
             // btnDocumentAdd
             // 
+            btnDocumentAdd.Font = new Font("Segoe UI", 9F);
             btnDocumentAdd.Location = new Point(15, 87);
             btnDocumentAdd.Name = "btnDocumentAdd";
             btnDocumentAdd.Size = new Size(170, 35);
@@ -118,13 +123,14 @@
             pnlHeader.Controls.Add(lblUserIcon);
             pnlHeader.Controls.Add(cmbUserRole);
             pnlHeader.Dock = DockStyle.Top;
-            pnlHeader.Location = new Point(203, 0);
+            pnlHeader.Location = new Point(200, 0);
             pnlHeader.Name = "pnlHeader";
-            pnlHeader.Size = new Size(597, 115);
+            pnlHeader.Size = new Size(600, 115);
             pnlHeader.TabIndex = 1;
             // 
             // btnClear
             // 
+            btnClear.Font = new Font("Segoe UI", 10.2F);
             btnClear.Location = new Point(490, 82);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(94, 29);
@@ -134,6 +140,7 @@
             // 
             // btnFilter
             // 
+            btnFilter.Font = new Font("Segoe UI", 10.2F);
             btnFilter.Location = new Point(469, 51);
             btnFilter.Name = "btnFilter";
             btnFilter.Size = new Size(94, 29);
@@ -143,39 +150,44 @@
             // 
             // cmbCategory
             // 
+            cmbCategory.Font = new Font("Segoe UI", 10.2F);
             cmbCategory.FormattingEnabled = true;
             cmbCategory.Location = new Point(259, 87);
             cmbCategory.Name = "cmbCategory";
-            cmbCategory.Size = new Size(151, 28);
+            cmbCategory.Size = new Size(151, 31);
             cmbCategory.TabIndex = 5;
             // 
             // cmbDepartment
             // 
+            cmbDepartment.Font = new Font("Segoe UI", 10.2F);
             cmbDepartment.FormattingEnabled = true;
-            cmbDepartment.Location = new Point(259, 49);
+            cmbDepartment.Location = new Point(291, 49);
             cmbDepartment.Name = "cmbDepartment";
-            cmbDepartment.Size = new Size(151, 28);
+            cmbDepartment.Size = new Size(151, 31);
             cmbDepartment.TabIndex = 4;
             // 
             // dtpEndDate
             // 
+            dtpEndDate.Font = new Font("Segoe UI", 10.2F);
             dtpEndDate.Location = new Point(3, 82);
             dtpEndDate.Name = "dtpEndDate";
-            dtpEndDate.Size = new Size(250, 27);
+            dtpEndDate.Size = new Size(250, 30);
             dtpEndDate.TabIndex = 3;
             // 
             // dtpStartDate
             // 
-            dtpStartDate.Location = new Point(3, 50);
+            dtpStartDate.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dtpStartDate.Font = new Font("Segoe UI", 10.2F);
+            dtpStartDate.Location = new Point(0, 46);
             dtpStartDate.Name = "dtpStartDate";
-            dtpStartDate.Size = new Size(250, 27);
+            dtpStartDate.Size = new Size(285, 30);
             dtpStartDate.TabIndex = 2;
             // 
             // lblUserIcon
             // 
             lblUserIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblUserIcon.AutoSize = true;
-            lblUserIcon.Location = new Point(345, 15);
+            lblUserIcon.Location = new Point(348, 15);
             lblUserIcon.Name = "lblUserIcon";
             lblUserIcon.Size = new Size(65, 20);
             lblUserIcon.TabIndex = 1;
@@ -184,10 +196,11 @@
             // cmbUserRole
             // 
             cmbUserRole.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cmbUserRole.Font = new Font("Segoe UI", 10.2F);
             cmbUserRole.FormattingEnabled = true;
-            cmbUserRole.Location = new Point(434, 12);
+            cmbUserRole.Location = new Point(437, 12);
             cmbUserRole.Name = "cmbUserRole";
-            cmbUserRole.Size = new Size(151, 28);
+            cmbUserRole.Size = new Size(151, 31);
             cmbUserRole.TabIndex = 0;
             // 
             // dgvDocuments
