@@ -68,7 +68,7 @@
             btnHelp.Name = "btnHelp";
             btnHelp.Size = new Size(170, 35);
             btnHelp.TabIndex = 4;
-            btnHelp.Text = "button5";
+            btnHelp.Text = "❓ Yardım";
             btnHelp.UseVisualStyleBackColor = true;
             // 
             // btnTrash
@@ -77,7 +77,7 @@
             btnTrash.Name = "btnTrash";
             btnTrash.Size = new Size(170, 35);
             btnTrash.TabIndex = 3;
-            btnTrash.Text = "button4";
+            btnTrash.Text = "🗑️ Çöp Kutusu";
             btnTrash.UseVisualStyleBackColor = true;
             // 
             // btnPendingApproval
@@ -86,7 +86,7 @@
             btnPendingApproval.Name = "btnPendingApproval";
             btnPendingApproval.Size = new Size(170, 35);
             btnPendingApproval.TabIndex = 2;
-            btnPendingApproval.Text = "button3";
+            btnPendingApproval.Text = "⏳ Onay Bekleyenler";
             btnPendingApproval.UseVisualStyleBackColor = true;
             // 
             // btnMyDocuments
@@ -95,7 +95,7 @@
             btnMyDocuments.Name = "btnMyDocuments";
             btnMyDocuments.Size = new Size(170, 35);
             btnMyDocuments.TabIndex = 1;
-            btnMyDocuments.Text = "button2";
+            btnMyDocuments.Text = "📂 Belgelerim";
             btnMyDocuments.UseVisualStyleBackColor = true;
             // 
             // btnDocumentAdd
@@ -104,7 +104,7 @@
             btnDocumentAdd.Name = "btnDocumentAdd";
             btnDocumentAdd.Size = new Size(170, 35);
             btnDocumentAdd.TabIndex = 0;
-            btnDocumentAdd.Text = "button1";
+            btnDocumentAdd.Text = "📄 Belge Ekle";
             btnDocumentAdd.UseVisualStyleBackColor = true;
             // 
             // pnlHeader
@@ -173,8 +173,9 @@
             // 
             // lblUserIcon
             // 
+            lblUserIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblUserIcon.AutoSize = true;
-            lblUserIcon.Location = new Point(333, 21);
+            lblUserIcon.Location = new Point(345, 15);
             lblUserIcon.Name = "lblUserIcon";
             lblUserIcon.Size = new Size(65, 20);
             lblUserIcon.TabIndex = 1;
