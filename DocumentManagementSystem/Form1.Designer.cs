@@ -35,15 +35,19 @@
             btnMyDocuments = new Button();
             btnDocumentAdd = new Button();
             pnlHeader = new Panel();
+            dgvDocuments = new DataGridView();
+            label5 = new Label();
+            label6 = new Label();
+            label7 = new Label();
+            label8 = new Label();
             btnClear = new Button();
             btnFilter = new Button();
+            cmbUserRole = new ComboBox();
             cmbCategory = new ComboBox();
             cmbDepartment = new ComboBox();
+            lblUserIcon = new Label();
             dtpEndDate = new DateTimePicker();
             dtpStartDate = new DateTimePicker();
-            lblUserIcon = new Label();
-            cmbUserRole = new ComboBox();
-            dgvDocuments = new DataGridView();
             pnlSidebar.SuspendLayout();
             pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDocuments).BeginInit();
@@ -64,8 +68,8 @@
             // 
             // btnHelp
             // 
-            btnHelp.Font = new Font("Segoe UI", 9F);
-            btnHelp.Location = new Point(15, 251);
+            btnHelp.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
+            btnHelp.Location = new Point(12, 276);
             btnHelp.Name = "btnHelp";
             btnHelp.Size = new Size(170, 35);
             btnHelp.TabIndex = 4;
@@ -74,8 +78,8 @@
             // 
             // btnTrash
             // 
-            btnTrash.Font = new Font("Segoe UI", 9F);
-            btnTrash.Location = new Point(15, 210);
+            btnTrash.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
+            btnTrash.Location = new Point(12, 235);
             btnTrash.Name = "btnTrash";
             btnTrash.Size = new Size(170, 35);
             btnTrash.TabIndex = 3;
@@ -84,8 +88,8 @@
             // 
             // btnPendingApproval
             // 
-            btnPendingApproval.Font = new Font("Segoe UI", 9F);
-            btnPendingApproval.Location = new Point(15, 169);
+            btnPendingApproval.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
+            btnPendingApproval.Location = new Point(12, 194);
             btnPendingApproval.Name = "btnPendingApproval";
             btnPendingApproval.Size = new Size(170, 35);
             btnPendingApproval.TabIndex = 2;
@@ -94,8 +98,8 @@
             // 
             // btnMyDocuments
             // 
-            btnMyDocuments.Font = new Font("Segoe UI", 9F);
-            btnMyDocuments.Location = new Point(15, 128);
+            btnMyDocuments.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
+            btnMyDocuments.Location = new Point(12, 153);
             btnMyDocuments.Name = "btnMyDocuments";
             btnMyDocuments.Size = new Size(170, 35);
             btnMyDocuments.TabIndex = 1;
@@ -104,8 +108,8 @@
             // 
             // btnDocumentAdd
             // 
-            btnDocumentAdd.Font = new Font("Segoe UI", 9F);
-            btnDocumentAdd.Location = new Point(15, 87);
+            btnDocumentAdd.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
+            btnDocumentAdd.Location = new Point(12, 112);
             btnDocumentAdd.Name = "btnDocumentAdd";
             btnDocumentAdd.Size = new Size(170, 35);
             btnDocumentAdd.TabIndex = 0;
@@ -114,94 +118,23 @@
             // 
             // pnlHeader
             // 
+            pnlHeader.Controls.Add(label5);
+            pnlHeader.Controls.Add(label6);
+            pnlHeader.Controls.Add(label7);
+            pnlHeader.Controls.Add(label8);
             pnlHeader.Controls.Add(btnClear);
             pnlHeader.Controls.Add(btnFilter);
+            pnlHeader.Controls.Add(cmbUserRole);
             pnlHeader.Controls.Add(cmbCategory);
             pnlHeader.Controls.Add(cmbDepartment);
+            pnlHeader.Controls.Add(lblUserIcon);
             pnlHeader.Controls.Add(dtpEndDate);
             pnlHeader.Controls.Add(dtpStartDate);
-            pnlHeader.Controls.Add(lblUserIcon);
-            pnlHeader.Controls.Add(cmbUserRole);
             pnlHeader.Dock = DockStyle.Top;
             pnlHeader.Location = new Point(200, 0);
             pnlHeader.Name = "pnlHeader";
-            pnlHeader.Size = new Size(600, 115);
+            pnlHeader.Size = new Size(600, 147);
             pnlHeader.TabIndex = 1;
-            // 
-            // btnClear
-            // 
-            btnClear.Font = new Font("Segoe UI", 10.2F);
-            btnClear.Location = new Point(490, 82);
-            btnClear.Name = "btnClear";
-            btnClear.Size = new Size(94, 29);
-            btnClear.TabIndex = 7;
-            btnClear.Text = "Temizle";
-            btnClear.UseVisualStyleBackColor = true;
-            // 
-            // btnFilter
-            // 
-            btnFilter.Font = new Font("Segoe UI", 10.2F);
-            btnFilter.Location = new Point(469, 51);
-            btnFilter.Name = "btnFilter";
-            btnFilter.Size = new Size(94, 29);
-            btnFilter.TabIndex = 6;
-            btnFilter.Text = "Filtrele";
-            btnFilter.UseVisualStyleBackColor = true;
-            // 
-            // cmbCategory
-            // 
-            cmbCategory.Font = new Font("Segoe UI", 10.2F);
-            cmbCategory.FormattingEnabled = true;
-            cmbCategory.Location = new Point(259, 87);
-            cmbCategory.Name = "cmbCategory";
-            cmbCategory.Size = new Size(151, 31);
-            cmbCategory.TabIndex = 5;
-            // 
-            // cmbDepartment
-            // 
-            cmbDepartment.Font = new Font("Segoe UI", 10.2F);
-            cmbDepartment.FormattingEnabled = true;
-            cmbDepartment.Location = new Point(291, 49);
-            cmbDepartment.Name = "cmbDepartment";
-            cmbDepartment.Size = new Size(151, 31);
-            cmbDepartment.TabIndex = 4;
-            // 
-            // dtpEndDate
-            // 
-            dtpEndDate.Font = new Font("Segoe UI", 10.2F);
-            dtpEndDate.Location = new Point(3, 82);
-            dtpEndDate.Name = "dtpEndDate";
-            dtpEndDate.Size = new Size(250, 30);
-            dtpEndDate.TabIndex = 3;
-            // 
-            // dtpStartDate
-            // 
-            dtpStartDate.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dtpStartDate.Font = new Font("Segoe UI", 10.2F);
-            dtpStartDate.Location = new Point(0, 46);
-            dtpStartDate.Name = "dtpStartDate";
-            dtpStartDate.Size = new Size(285, 30);
-            dtpStartDate.TabIndex = 2;
-            // 
-            // lblUserIcon
-            // 
-            lblUserIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            lblUserIcon.AutoSize = true;
-            lblUserIcon.Location = new Point(348, 15);
-            lblUserIcon.Name = "lblUserIcon";
-            lblUserIcon.Size = new Size(65, 20);
-            lblUserIcon.TabIndex = 1;
-            lblUserIcon.Text = "Kullanıcı";
-            // 
-            // cmbUserRole
-            // 
-            cmbUserRole.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            cmbUserRole.Font = new Font("Segoe UI", 10.2F);
-            cmbUserRole.FormattingEnabled = true;
-            cmbUserRole.Location = new Point(437, 12);
-            cmbUserRole.Name = "cmbUserRole";
-            cmbUserRole.Size = new Size(151, 31);
-            cmbUserRole.TabIndex = 0;
             // 
             // dgvDocuments
             // 
@@ -213,6 +146,121 @@
             dgvDocuments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDocuments.Size = new Size(800, 450);
             dgvDocuments.TabIndex = 2;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Arial", 9F);
+            label5.Location = new Point(387, 53);
+            label5.Name = "label5";
+            label5.Size = new Size(62, 17);
+            label5.TabIndex = 23;
+            label5.Text = "Kategori";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Arial", 9F);
+            label6.Location = new Point(261, 53);
+            label6.Name = "label6";
+            label6.Size = new Size(81, 17);
+            label6.TabIndex = 22;
+            label6.Text = "Departman";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Arial", 9F);
+            label7.Location = new Point(135, 53);
+            label7.Name = "label7";
+            label7.Size = new Size(74, 17);
+            label7.TabIndex = 21;
+            label7.Text = "Bitiş Tarihi";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Arial", 9F);
+            label8.Location = new Point(9, 53);
+            label8.Name = "label8";
+            label8.Size = new Size(110, 17);
+            label8.TabIndex = 20;
+            label8.Text = "Başlangıç Tarihi";
+            // 
+            // btnClear
+            // 
+            btnClear.Font = new Font("Arial", 9F);
+            btnClear.Location = new Point(496, 104);
+            btnClear.Name = "btnClear";
+            btnClear.Size = new Size(95, 30);
+            btnClear.TabIndex = 19;
+            btnClear.Text = "Temizle";
+            btnClear.UseVisualStyleBackColor = true;
+            // 
+            // btnFilter
+            // 
+            btnFilter.Font = new Font("Arial", 9F);
+            btnFilter.Location = new Point(387, 104);
+            btnFilter.Name = "btnFilter";
+            btnFilter.Size = new Size(95, 30);
+            btnFilter.TabIndex = 18;
+            btnFilter.Text = "Filtrele";
+            btnFilter.UseVisualStyleBackColor = true;
+            // 
+            // cmbUserRole
+            // 
+            cmbUserRole.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cmbUserRole.Font = new Font("Arial", 9F);
+            cmbUserRole.FormattingEnabled = true;
+            cmbUserRole.Location = new Point(468, 13);
+            cmbUserRole.Name = "cmbUserRole";
+            cmbUserRole.Size = new Size(120, 25);
+            cmbUserRole.TabIndex = 12;
+            // 
+            // cmbCategory
+            // 
+            cmbCategory.Font = new Font("Arial", 9F);
+            cmbCategory.FormattingEnabled = true;
+            cmbCategory.Location = new Point(387, 73);
+            cmbCategory.Name = "cmbCategory";
+            cmbCategory.Size = new Size(120, 25);
+            cmbCategory.TabIndex = 17;
+            // 
+            // cmbDepartment
+            // 
+            cmbDepartment.Font = new Font("Arial", 9F);
+            cmbDepartment.FormattingEnabled = true;
+            cmbDepartment.Location = new Point(261, 73);
+            cmbDepartment.Name = "cmbDepartment";
+            cmbDepartment.Size = new Size(120, 25);
+            cmbDepartment.TabIndex = 16;
+            // 
+            // lblUserIcon
+            // 
+            lblUserIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblUserIcon.AutoSize = true;
+            lblUserIcon.Font = new Font("Arial", 9F);
+            lblUserIcon.Location = new Point(396, 16);
+            lblUserIcon.Name = "lblUserIcon";
+            lblUserIcon.Size = new Size(66, 17);
+            lblUserIcon.TabIndex = 13;
+            lblUserIcon.Text = "Kullanıcı:";
+            // 
+            // dtpEndDate
+            // 
+            dtpEndDate.Font = new Font("Arial", 9F);
+            dtpEndDate.Location = new Point(135, 73);
+            dtpEndDate.Name = "dtpEndDate";
+            dtpEndDate.Size = new Size(120, 25);
+            dtpEndDate.TabIndex = 15;
+            // 
+            // dtpStartDate
+            // 
+            dtpStartDate.Font = new Font("Arial", 9F);
+            dtpStartDate.Location = new Point(9, 73);
+            dtpStartDate.Name = "dtpStartDate";
+            dtpStartDate.Size = new Size(120, 25);
+            dtpStartDate.TabIndex = 14;
             // 
             // Form1
             // 
@@ -241,12 +289,16 @@
         private Button btnPendingApproval;
         private Button btnMyDocuments;
         private Button btnDocumentAdd;
-        private Label lblUserIcon;
-        private ComboBox cmbUserRole;
+        private Label label5;
+        private Label label6;
+        private Label label7;
+        private Label label8;
         private Button btnClear;
         private Button btnFilter;
+        private ComboBox cmbUserRole;
         private ComboBox cmbCategory;
         private ComboBox cmbDepartment;
+        private Label lblUserIcon;
         private DateTimePicker dtpEndDate;
         private DateTimePicker dtpStartDate;
     }

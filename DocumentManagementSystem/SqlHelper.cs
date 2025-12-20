@@ -9,7 +9,7 @@ namespace DocumentManagementSystem
     {
         // ÖNERİ: Bağlantı adresini "." yaparak her bilgisayarda çalışmasını sağla.
         // Eğer App.config kullanmıyorsan bu şekilde kalabilir:
-        private static string connectionString = @"Data Source=bilgisayar\SQLEXPRESS;Initial Catalog=odDocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
+        private static string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=odDocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
 
 
         // ALTERNATİF: App.config dosyasından okumak istersen (Daha profesyonel):
