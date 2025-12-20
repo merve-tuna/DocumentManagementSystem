@@ -22,7 +22,7 @@ namespace DocumentManagementSystem
             SetupUI(); // Olaylar ve Veriler
         }
 
- 
+
 
         private void SetupUI()
         {
@@ -120,7 +120,7 @@ namespace DocumentManagementSystem
         private void ResetButtonStyles()
         {
             // Tüm butonlarýn rengini varsayýlan yap (Örn: Beyaz veya Control rengi)
-            Color defaultColor = Color.White; 
+            Color defaultColor = Color.White;
 
             btnDocumentAdd.BackColor = defaultColor;
             btnMyDocuments.BackColor = defaultColor;
@@ -199,6 +199,11 @@ namespace DocumentManagementSystem
                     this.Size = finalSize;
                 }
             }
+        }
+
+        private void lblUserIcon_Click(object sender, EventArgs e)
+        {
+
         }
 
         //private void LoadFilterData()

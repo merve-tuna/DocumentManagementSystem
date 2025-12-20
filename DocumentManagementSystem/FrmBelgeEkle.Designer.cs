@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmBelgeEkle));
             btnBack = new Button();
             pnlDropZone = new Panel();
+            label6 = new Label();
             pictureBox1 = new PictureBox();
             lblSelectedFile = new Label();
             panel1 = new Panel();
@@ -48,17 +49,15 @@
             panel2 = new Panel();
             panel3 = new Panel();
             label5 = new Label();
-            label6 = new Label();
             pnlDropZone.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel1.SuspendLayout();
-            panel2.SuspendLayout();
             panel3.SuspendLayout();
             SuspendLayout();
             // 
             // btnBack
             // 
-            btnBack.Location = new Point(12, 12);
+            btnBack.Location = new Point(6, 12);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(95, 30);
             btnBack.TabIndex = 0;
@@ -77,6 +76,17 @@
             pnlDropZone.Size = new Size(330, 255);
             pnlDropZone.TabIndex = 1;
             pnlDropZone.Paint += panel1_Paint;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(74, 153);
+            label6.Name = "label6";
+            label6.Size = new Size(182, 60);
+            label6.TabIndex = 1;
+            label6.Text = "Belgeyi Buraya Sürükleyin \r\nveya \r\nTıklayıp Seçin";
+            label6.TextAlign = ContentAlignment.TopCenter;
+            label6.Click += label6_Click;
             // 
             // pictureBox1
             // 
@@ -215,22 +225,22 @@
             // 
             // panel2
             // 
-            panel2.Controls.Add(btnBack);
             panel2.Dock = DockStyle.Left;
             panel2.Location = new Point(0, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(114, 450);
+            panel2.Size = new Size(27, 450);
             panel2.TabIndex = 4;
             // 
             // panel3
             // 
+            panel3.Controls.Add(btnBack);
             panel3.Controls.Add(label5);
             panel3.Controls.Add(pnlDropZone);
             panel3.Controls.Add(lblSelectedFile);
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(114, 0);
+            panel3.Location = new Point(27, 0);
             panel3.Name = "panel3";
-            panel3.Size = new Size(336, 450);
+            panel3.Size = new Size(423, 450);
             panel3.TabIndex = 5;
             // 
             // label5
@@ -242,17 +252,6 @@
             label5.Size = new Size(97, 25);
             label5.TabIndex = 3;
             label5.Text = "Belge Ekle";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(74, 153);
-            label6.Name = "label6";
-            label6.Size = new Size(182, 60);
-            label6.TabIndex = 1;
-            label6.Text = "Belgeyi Buraya Sürükleyin \r\nveya \r\nTıklayıp Seçin";
-            label6.TextAlign = ContentAlignment.TopCenter;
-            label6.Click += label6_Click;
             // 
             // FrmBelgeEkle
             // 
@@ -269,7 +268,6 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            panel2.ResumeLayout(false);
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             ResumeLayout(false);
