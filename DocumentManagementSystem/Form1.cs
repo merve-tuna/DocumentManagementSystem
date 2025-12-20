@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -205,6 +206,77 @@ namespace DocumentManagementSystem
                     this.Location = finalLocation;
                     this.Size = finalSize;
                 }
+            }
+        }
+
+        private void LoadFilterData()
+        {
+            try
+            {
+                // Departmanlarý Çek
+                string deptQuery = "SELECT DepartmentID, DepartmentName FROM Departments WHERE IsActive = 1";
+                DataTable dtDept = SqlHelper.GetData(deptQuery);
+
+                cmbDepartment.DataSource = dtDept;
+                cmbDepartment.DisplayMember = "DepartmentName";
+                cmbDepartment.ValueMember = "DepartmentID";
+                cmbDepartment.SelectedIndex = -1;
+
+                // Kategorileri Çek
+                string catQuery = "SELECT CategoryID, CategoryName FROM Categories WHERE IsActive = 1";
+                DataTable dtCat = SqlHelper.GetData(catQuery);
+
+                cmbCategory.DataSource = dtCat;
+                cmbCategory.DisplayMember = "CategoryName";
+                cmbCategory.ValueMember = "CategoryID";
+                cmbCategory.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Filtre verileri yüklenirken hata: " + ex.Message);
+            }
+        }
+
+        private void LoadDocuments()
+        {
+            try
+            {
+                // Senin veritabaný yapýna uygun sorgu
+                string query = @"
+            SELECT 
+                d.DocumentID,
+                d.DocumentName AS [Belge Adý],
+                dep.DepartmentName AS [Departman],
+                cat.CategoryName AS [Kategori],
+                u.UserName AS [Yükleyen],
+                d.UploadDate AS [Tarih],
+                d.CurrentVersion AS [Versiyon],
+                s.StatusName AS [Durum]
+            FROM Documents d
+            INNER JOIN Departments dep ON d.DepartmentID = dep.DepartmentID
+            INNER JOIN Categories cat ON d.CategoryID = cat.CategoryID
+            INNER JOIN Users u ON d.UploadedByUserID = u.UserID
+            INNER JOIN DocumentStatus s ON d.StatusID = s.StatusID
+            WHERE d.IsDeleted = 0";
+
+                DataTable dt = SqlHelper.GetData(query);
+                dgvDocuments.DataSource = dt;
+
+                // ID sütununu gizle
+                if (dgvDocuments.Columns["DocumentID"] != null)
+                {
+                    dgvDocuments.Columns["DocumentID"].Visible = false;
+                }
+
+                // Tarih formatý
+                if (dgvDocuments.Columns["Tarih"] != null)
+                {
+                    dgvDocuments.Columns["Tarih"].DefaultCellStyle.Format = "dd.MM.yyyy HH:mm";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Belgeler yüklenirken hata: " + ex.Message);
             }
         }
     }

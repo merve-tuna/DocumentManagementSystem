@@ -21,5 +21,15 @@ namespace DocumentManagementSystem
         {
             this.Close(); // Bu sayfayı kapatır (Böylece ana sayfa otomatik açılır)
         }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void lblSelectedFile_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
