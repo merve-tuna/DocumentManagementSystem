@@ -221,8 +221,9 @@
             btnAction.Name = "btnAction";
             btnAction.Size = new Size(95, 30);
             btnAction.TabIndex = 5;
-            btnAction.Text = "button2";
+            btnAction.Text = "btnSave";
             btnAction.UseVisualStyleBackColor = true;
+            btnAction.Click += btnAction_Click;
             // 
             // panel2
             // 

@@ -39,6 +39,7 @@
             cmbUserRole = new ComboBox();
             lblUserIconA = new Label();
             pnlHeader = new Panel();
+            lblRecordCount = new Label();
             panel1 = new Panel();
             btnSearch = new Button();
             txtSearch = new TextBox();
@@ -152,7 +153,7 @@
             lblUserIconA.AutoSize = true;
             lblUserIconA.Font = new Font("Arial", 9F);
             lblUserIconA.ForeColor = SystemColors.Control;
-            lblUserIconA.Location = new Point(62, 45);
+            lblUserIconA.Location = new Point(87, 44);
             lblUserIconA.Name = "lblUserIconA";
             lblUserIconA.Size = new Size(66, 17);
             lblUserIconA.TabIndex = 13;
@@ -161,6 +162,7 @@
             // 
             // pnlHeader
             // 
+            pnlHeader.Controls.Add(lblRecordCount);
             pnlHeader.Controls.Add(panel1);
             pnlHeader.Controls.Add(label5);
             pnlHeader.Controls.Add(label6);
@@ -177,6 +179,15 @@
             pnlHeader.Name = "pnlHeader";
             pnlHeader.Size = new Size(600, 147);
             pnlHeader.TabIndex = 1;
+            // 
+            // lblRecordCount
+            // 
+            lblRecordCount.AutoSize = true;
+            lblRecordCount.Location = new Point(47, 117);
+            lblRecordCount.Name = "lblRecordCount";
+            lblRecordCount.Size = new Size(50, 20);
+            lblRecordCount.TabIndex = 26;
+            lblRecordCount.Text = "label1";
             // 
             // panel1
             // 
@@ -266,6 +277,7 @@
             btnFilter.TabIndex = 18;
             btnFilter.Text = "Filtrele";
             btnFilter.UseVisualStyleBackColor = true;
+            btnFilter.Click += btnFilter_Click;
             // 
             // cmbCategory
             // 
@@ -359,5 +371,6 @@
         private Panel panel1;
         private TextBox txtSearch;
         private Button btnSearch;
+        private Label lblRecordCount;
     }
 }

@@ -7,24 +7,23 @@ namespace DocumentManagementSystem
 {
     public static class SqlHelper
     {
-        // ÖNERİ: Bağlantı adresini "." yaparak her bilgisayarda çalışmasını sağla.
-        // Eğer App.config kullanmıyorsan bu şekilde kalabilir:
-        private static string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=odDocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
+        private static string connectionString =
+    @"Data Source=.\SQLEXPRESS;Initial Catalog=DocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
 
-
-        // ALTERNATİF: App.config dosyasından okumak istersen (Daha profesyonel):
+        // Alternatif: App.config'den okumak için
         // private static string connectionString = ConfigurationManager.ConnectionStrings["MyConnString"].ConnectionString;
 
-        // Veri Çekme Fonksiyonu (SELECT)
-        public static DataTable GetData(string query, SqlParameter[] parameters = null)
+        // Stored Procedure ile veri çekme
+        public static DataTable GetDataByProcedure(string procedureName, SqlParameter[] parameters = null)
         {
-            // DataTable'ı dışarıda tanımlayıp using içinde doldurmak daha güvenlidir.
             DataTable dt = new DataTable();
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(procedureName, conn))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure; // Bu satır önemli!
+
                     if (parameters != null)
                         cmd.Parameters.AddRange(parameters);
 
@@ -38,32 +37,33 @@ namespace DocumentManagementSystem
                     }
                     catch (Exception ex)
                     {
-                        // Hata mesajını özelleştirebilir veya loglayabilirsin
-                        throw new Exception("Veri çekme hatası: " + ex.Message);
+                        throw new Exception($"Stored Procedure hatası [{procedureName}]: " + ex.Message);
                     }
                 }
             }
             return dt;
         }
 
-        // Veri Kaydetme/Güncelleme/Silme Fonksiyonu (INSERT, UPDATE, DELETE)
-        public static int ExecuteQuery(string query, SqlParameter[] parameters = null)
+        // Stored Procedure ile INSERT/UPDATE/DELETE
+        public static int ExecuteProcedure(string procedureName, SqlParameter[] parameters = null)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(procedureName, conn))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
                     if (parameters != null)
                         cmd.Parameters.AddRange(parameters);
 
                     try
                     {
                         conn.Open();
-                        return cmd.ExecuteNonQuery(); // Etkilenen satır sayısını döner
+                        return cmd.ExecuteNonQuery();
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("İşlem hatası: " + ex.Message);
+                        throw new Exception($"Stored Procedure hatası [{procedureName}]: " + ex.Message);
                     }
                 }
             }
