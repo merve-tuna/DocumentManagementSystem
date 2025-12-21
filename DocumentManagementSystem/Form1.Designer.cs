@@ -37,7 +37,11 @@
             btnMyDocuments = new Button();
             btnDocumentAdd = new Button();
             cmbUserRole = new ComboBox();
+            lblUserIconA = new Label();
             pnlHeader = new Panel();
+            panel1 = new Panel();
+            btnSearch = new Button();
+            txtSearch = new TextBox();
             label5 = new Label();
             label6 = new Label();
             label7 = new Label();
@@ -48,12 +52,11 @@
             cmbDepartment = new ComboBox();
             dtpEndDate = new DateTimePicker();
             dtpStartDate = new DateTimePicker();
-            lblUserIconA = new Label();
             dgvDocuments = new DataGridView();
-            label1 = new Label();
             pnlSidebar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)lblUserIcon).BeginInit();
             pnlHeader.SuspendLayout();
+            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDocuments).BeginInit();
             SuspendLayout();
             // 
@@ -66,6 +69,7 @@
             pnlSidebar.Controls.Add(btnMyDocuments);
             pnlSidebar.Controls.Add(btnDocumentAdd);
             pnlSidebar.Controls.Add(cmbUserRole);
+            pnlSidebar.Controls.Add(lblUserIconA);
             pnlSidebar.Dock = DockStyle.Left;
             pnlSidebar.Location = new Point(0, 0);
             pnlSidebar.Name = "pnlSidebar";
@@ -75,7 +79,7 @@
             // lblUserIcon
             // 
             lblUserIcon.Image = (Image)resources.GetObject("lblUserIcon.Image");
-            lblUserIcon.Location = new Point(3, 3);
+            lblUserIcon.Location = new Point(16, 12);
             lblUserIcon.Name = "lblUserIcon";
             lblUserIcon.Size = new Size(40, 31);
             lblUserIcon.SizeMode = PictureBoxSizeMode.Zoom;
@@ -137,14 +141,27 @@
             cmbUserRole.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             cmbUserRole.Font = new Font("Arial", 9F);
             cmbUserRole.FormattingEnabled = true;
-            cmbUserRole.Location = new Point(49, 9);
+            cmbUserRole.Location = new Point(62, 16);
             cmbUserRole.Name = "cmbUserRole";
             cmbUserRole.Size = new Size(120, 25);
             cmbUserRole.TabIndex = 12;
             // 
+            // lblUserIconA
+            // 
+            lblUserIconA.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblUserIconA.AutoSize = true;
+            lblUserIconA.Font = new Font("Arial", 9F);
+            lblUserIconA.ForeColor = SystemColors.Control;
+            lblUserIconA.Location = new Point(62, 45);
+            lblUserIconA.Name = "lblUserIconA";
+            lblUserIconA.Size = new Size(66, 17);
+            lblUserIconA.TabIndex = 13;
+            lblUserIconA.Text = "Kullanıcı:";
+            lblUserIconA.Click += lblUserIcon_Click;
+            // 
             // pnlHeader
             // 
-            pnlHeader.Controls.Add(label1);
+            pnlHeader.Controls.Add(panel1);
             pnlHeader.Controls.Add(label5);
             pnlHeader.Controls.Add(label6);
             pnlHeader.Controls.Add(label7);
@@ -155,12 +172,39 @@
             pnlHeader.Controls.Add(cmbDepartment);
             pnlHeader.Controls.Add(dtpEndDate);
             pnlHeader.Controls.Add(dtpStartDate);
-            pnlHeader.Controls.Add(lblUserIconA);
             pnlHeader.Dock = DockStyle.Top;
             pnlHeader.Location = new Point(200, 0);
             pnlHeader.Name = "pnlHeader";
             pnlHeader.Size = new Size(600, 147);
             pnlHeader.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(btnSearch);
+            panel1.Controls.Add(txtSearch);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(600, 43);
+            panel1.TabIndex = 25;
+            // 
+            // btnSearch
+            // 
+            btnSearch.Location = new Point(502, 12);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(95, 30);
+            btnSearch.TabIndex = 26;
+            btnSearch.Text = "Ara";
+            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click_1;
+            // 
+            // txtSearch
+            // 
+            txtSearch.Location = new Point(9, 12);
+            txtSearch.Name = "txtSearch";
+            txtSearch.Size = new Size(490, 27);
+            txtSearch.TabIndex = 25;
+            txtSearch.KeyDown += txtSearch_KeyDown;
             // 
             // label5
             // 
@@ -205,17 +249,18 @@
             // btnClear
             // 
             btnClear.Font = new Font("Arial", 9F);
-            btnClear.Location = new Point(496, 104);
+            btnClear.Location = new Point(502, 112);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(95, 30);
             btnClear.TabIndex = 19;
             btnClear.Text = "Temizle";
             btnClear.UseVisualStyleBackColor = true;
+            btnClear.Click += btnClear_Click;
             // 
             // btnFilter
             // 
             btnFilter.Font = new Font("Arial", 9F);
-            btnFilter.Location = new Point(387, 104);
+            btnFilter.Location = new Point(502, 69);
             btnFilter.Name = "btnFilter";
             btnFilter.Size = new Size(95, 30);
             btnFilter.TabIndex = 18;
@@ -228,7 +273,7 @@
             cmbCategory.FormattingEnabled = true;
             cmbCategory.Location = new Point(387, 73);
             cmbCategory.Name = "cmbCategory";
-            cmbCategory.Size = new Size(120, 25);
+            cmbCategory.Size = new Size(112, 25);
             cmbCategory.TabIndex = 17;
             // 
             // cmbDepartment
@@ -237,7 +282,7 @@
             cmbDepartment.FormattingEnabled = true;
             cmbDepartment.Location = new Point(261, 73);
             cmbDepartment.Name = "cmbDepartment";
-            cmbDepartment.Size = new Size(120, 25);
+            cmbDepartment.Size = new Size(112, 25);
             cmbDepartment.TabIndex = 16;
             // 
             // dtpEndDate
@@ -245,7 +290,7 @@
             dtpEndDate.Font = new Font("Arial", 9F);
             dtpEndDate.Location = new Point(135, 73);
             dtpEndDate.Name = "dtpEndDate";
-            dtpEndDate.Size = new Size(120, 25);
+            dtpEndDate.Size = new Size(112, 25);
             dtpEndDate.TabIndex = 15;
             // 
             // dtpStartDate
@@ -253,20 +298,8 @@
             dtpStartDate.Font = new Font("Arial", 9F);
             dtpStartDate.Location = new Point(9, 73);
             dtpStartDate.Name = "dtpStartDate";
-            dtpStartDate.Size = new Size(120, 25);
+            dtpStartDate.Size = new Size(112, 25);
             dtpStartDate.TabIndex = 14;
-            // 
-            // lblUserIconA
-            // 
-            lblUserIconA.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            lblUserIconA.AutoSize = true;
-            lblUserIconA.Font = new Font("Arial", 9F);
-            lblUserIconA.Location = new Point(416, 17);
-            lblUserIconA.Name = "lblUserIconA";
-            lblUserIconA.Size = new Size(66, 17);
-            lblUserIconA.TabIndex = 13;
-            lblUserIconA.Text = "Kullanıcı:";
-            lblUserIconA.Click += lblUserIcon_Click;
             // 
             // dgvDocuments
             // 
@@ -279,15 +312,6 @@
             dgvDocuments.Size = new Size(800, 450);
             dgvDocuments.TabIndex = 2;
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(110, 10);
-            label1.Name = "label1";
-            label1.Size = new Size(32, 20);
-            label1.TabIndex = 24;
-            label1.Text = "Ara";
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -299,9 +323,12 @@
             Name = "Form1";
             Text = "Form1";
             pnlSidebar.ResumeLayout(false);
+            pnlSidebar.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)lblUserIcon).EndInit();
             pnlHeader.ResumeLayout(false);
             pnlHeader.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDocuments).EndInit();
             ResumeLayout(false);
         }
@@ -329,6 +356,8 @@
         private DateTimePicker dtpEndDate;
         private DateTimePicker dtpStartDate;
         private PictureBox lblUserIcon;
-        private Label label1;
+        private Panel panel1;
+        private TextBox txtSearch;
+        private Button btnSearch;
     }
 }

@@ -21,7 +21,7 @@ namespace DocumentManagementSystem
             LoadDummyData();
         }
 
-//
+        //
 
         private void SetupGrid()
         {
@@ -66,7 +66,7 @@ namespace DocumentManagementSystem
         }
 
         // Bir satır seçildiğinde çalışır
-//
+        //
         // Çift tıklama (İçine girme)
         private void DgvMyDocs_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -79,14 +79,14 @@ namespace DocumentManagementSystem
         }
 
         // Buton aksiyonları için yardımcı metod
-        private void PerformAction(string actionName)
-        {
-            if (dgvMyDocs.SelectedRows.Count > 0)
-            {
-                string docName = dgvMyDocs.SelectedRows[0].Cells["Belge Adı"].Value.ToString();
-                MessageBox.Show($"{docName} için '{actionName}' işlemi yapılıyor.", "İşlem", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
+        //private void PerformAction(string actionName)
+        //{
+        //    if (dgvMyDocs.SelectedRows.Count > 0)
+        //    {
+        //        string docName = dgvMyDocs.SelectedRows[0].Cells["Belge Adı"].Value.ToString();
+        //        MessageBox.Show($"{docName} için '{actionName}' işlemi yapılıyor.", "İşlem", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //}
 
         private void button1_Click(object sender, EventArgs e)
 
@@ -95,5 +95,7 @@ namespace DocumentManagementSystem
             this.Close(); // Bu sayfayı kapatır (Böylece ana sayfa otomatik açılır)
 
         }
+
+
     }
 }

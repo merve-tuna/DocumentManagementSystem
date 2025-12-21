@@ -73,7 +73,7 @@
             pnlDropZone.Controls.Add(pictureBox1);
             pnlDropZone.Location = new Point(3, 80);
             pnlDropZone.Name = "pnlDropZone";
-            pnlDropZone.Size = new Size(330, 255);
+            pnlDropZone.Size = new Size(335, 255);
             pnlDropZone.TabIndex = 1;
             pnlDropZone.Paint += panel1_Paint;
             // 
@@ -124,14 +124,14 @@
             panel1.Controls.Add(txtDocName);
             panel1.Controls.Add(btnAction);
             panel1.Dock = DockStyle.Right;
-            panel1.Location = new Point(450, 0);
+            panel1.Location = new Point(374, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(350, 450);
+            panel1.Size = new Size(426, 450);
             panel1.TabIndex = 3;
             // 
             // button1
             // 
-            button1.Location = new Point(218, 12);
+            button1.Location = new Point(67, 408);
             button1.Name = "button1";
             button1.Size = new Size(120, 30);
             button1.TabIndex = 14;
@@ -140,23 +140,23 @@
             // 
             // txtDescription
             // 
-            txtDescription.Location = new Point(6, 264);
+            txtDescription.Location = new Point(6, 241);
             txtDescription.Name = "txtDescription";
-            txtDescription.Size = new Size(332, 120);
+            txtDescription.Size = new Size(383, 94);
             txtDescription.TabIndex = 13;
             txtDescription.Text = "";
             // 
             // cmbDepartment
             // 
             cmbDepartment.FormattingEnabled = true;
-            cmbDepartment.Location = new Point(6, 156);
+            cmbDepartment.Location = new Point(6, 133);
             cmbDepartment.Name = "cmbDepartment";
-            cmbDepartment.Size = new Size(332, 28);
+            cmbDepartment.Size = new Size(383, 28);
             cmbDepartment.TabIndex = 12;
             // 
             // btnClear
             // 
-            btnClear.Location = new Point(142, 408);
+            btnClear.Location = new Point(193, 408);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(95, 30);
             btnClear.TabIndex = 4;
@@ -166,15 +166,15 @@
             // cmbCategory
             // 
             cmbCategory.FormattingEnabled = true;
-            cmbCategory.Location = new Point(6, 210);
+            cmbCategory.Location = new Point(6, 187);
             cmbCategory.Name = "cmbCategory";
-            cmbCategory.Size = new Size(332, 28);
+            cmbCategory.Size = new Size(383, 28);
             cmbCategory.TabIndex = 11;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(6, 241);
+            label4.Location = new Point(6, 218);
             label4.Name = "label4";
             label4.Size = new Size(70, 20);
             label4.TabIndex = 10;
@@ -183,7 +183,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(6, 187);
+            label3.Location = new Point(6, 164);
             label3.Name = "label3";
             label3.Size = new Size(66, 20);
             label3.TabIndex = 9;
@@ -192,7 +192,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(6, 133);
+            label2.Location = new Point(3, 110);
             label2.Name = "label2";
             label2.Size = new Size(94, 20);
             label2.TabIndex = 8;
@@ -201,22 +201,23 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(6, 80);
+            label1.Location = new Point(6, 57);
             label1.Name = "label1";
             label1.Size = new Size(84, 20);
             label1.TabIndex = 7;
             label1.Text = "Belge Adı *";
+            label1.Click += label1_Click;
             // 
             // txtDocName
             // 
-            txtDocName.Location = new Point(6, 103);
+            txtDocName.Location = new Point(3, 80);
             txtDocName.Name = "txtDocName";
-            txtDocName.Size = new Size(332, 27);
+            txtDocName.Size = new Size(386, 27);
             txtDocName.TabIndex = 6;
             // 
             // btnAction
             // 
-            btnAction.Location = new Point(243, 408);
+            btnAction.Location = new Point(294, 408);
             btnAction.Name = "btnAction";
             btnAction.Size = new Size(95, 30);
             btnAction.TabIndex = 5;
@@ -228,7 +229,7 @@
             panel2.Dock = DockStyle.Left;
             panel2.Location = new Point(0, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(27, 450);
+            panel2.Size = new Size(30, 450);
             panel2.TabIndex = 4;
             // 
             // panel3
@@ -238,9 +239,9 @@
             panel3.Controls.Add(pnlDropZone);
             panel3.Controls.Add(lblSelectedFile);
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(27, 0);
+            panel3.Location = new Point(30, 0);
             panel3.Name = "panel3";
-            panel3.Size = new Size(423, 450);
+            panel3.Size = new Size(344, 450);
             panel3.TabIndex = 5;
             // 
             // label5

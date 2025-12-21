@@ -16,6 +16,7 @@ namespace DocumentManagementSystem
 
     public partial class Form1 : Form
     {
+        BindingSource binder = new BindingSource();
         public Form1()
         {
             InitializeComponent();
@@ -206,6 +207,70 @@ namespace DocumentManagementSystem
 
         }
 
+        // 1. Önce arama iþlemini yapan ORTAK bir metot yazalým
+        private void DoSearch()
+        {
+            // Arama kutusundaki metni al, boþluklarý temizle
+            string arananKelime = txtSearch.Text.Trim().Replace("'", "''");
+
+            if (string.IsNullOrEmpty(arananKelime))
+            {
+                // Kutu boþsa filtreyi kaldýr
+                binder.RemoveFilter();
+            }
+            else
+            {
+                // BURAYA DÝKKAT: Veritabanýndaki sütun adýnýz 'DosyaAdi' deðilse deðiþtirin!
+                binder.Filter = string.Format("DosyaAdi LIKE '%{0}%'", arananKelime);
+                if (binder.Count == 0)
+                {
+                    MessageBox.Show("Aradýðýnýz kriterlere uygun belge bulunamadý.", "Sonuç Yok", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Ýsterseniz filtreyi geri kaldýrabilirsiniz ki tablo boþ kalmasýn:
+                    // binder.RemoveFilter(); 
+                    // txtSearch.SelectAll(); // Kullanýcý kolayca yeni kelime yazabilsin diye metni seç
+                }
+            }
+        }
+
+        // 2. "Ara" Butonuna týklandýðýnda çalýþacak kod
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            DoSearch();
+        }
+
+        // 3. TextBox üzerindeyken tuþa basýldýðýnda çalýþacak kod
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Basýlan tuþ "Enter" ise
+            if (e.KeyCode == Keys.Enter)
+            {
+                DoSearch();
+
+                // "Dýt" sesini engellemek ve iþlemi tamamlandý saymak için:
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void btnSearch_Click_1(object sender, EventArgs e)
+        {
+            DoSearch();
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            // 1. Arama kutusundaki yazýyý siliyoruz
+            txtSearch.Text = "";
+            // (Not: Bu iþlem TextChanged olayýný tetikler ve filtre zaten otomatik kalkar, 
+            // ancak garanti olsun diye alt satýrý da ekliyoruz.)
+
+            // 2. Tablodaki filtreyi kaldýrýp tüm belgeleri geri getiriyoruz
+            binder.RemoveFilter();
+
+            // 3. Kullanýcý tekrar hemen yazabilsin diye imleci kutuya odaklýyoruz
+            txtSearch.Focus();
+        }
+
         //private void LoadFilterData()
         //{
         //    try
@@ -275,6 +340,19 @@ namespace DocumentManagementSystem
         //    {
         //        MessageBox.Show("Belgeler yüklenirken hata: " + ex.Message);
         //    }
+        //}
+
+        //private void Form1_Load(object sender, EventArgs e)
+        //{
+        //    // 1. Veritabanýndan veriyi DataTable olarak çekin (Örnek fonksiyon)
+        //    // Buradaki 'VerileriGetir()' sizin SQL'den veri çeken metodunuzdur.
+        //    DataTable dt = VerileriGetir();
+
+        //    // 2. Veriyi aracýya (binder) yükle
+        //    binder.DataSource = dt;
+
+        //    // 3. Grid'i aracýya baðla
+        //    dgvDocuments.DataSource = binder;
         //}
     }
 }

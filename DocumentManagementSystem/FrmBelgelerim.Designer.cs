@@ -30,11 +30,11 @@
         {
             button1 = new Button();
             pnlTopMenu = new Panel();
-            dgvMyDocs = new DataGridView();
-            btnDownload = new Button();
-            btnUpdate = new Button();
-            btnPrint = new Button();
             btnDelete = new Button();
+            btnPrint = new Button();
+            btnUpdate = new Button();
+            btnDownload = new Button();
+            dgvMyDocs = new DataGridView();
             pnlTopMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvMyDocs).BeginInit();
             SuspendLayout();
@@ -62,33 +62,14 @@
             pnlTopMenu.Size = new Size(800, 111);
             pnlTopMenu.TabIndex = 1;
             // 
-            // dgvMyDocs
+            // btnDelete
             // 
-            dgvMyDocs.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvMyDocs.Dock = DockStyle.Fill;
-            dgvMyDocs.Location = new Point(0, 111);
-            dgvMyDocs.Name = "dgvMyDocs";
-            dgvMyDocs.RowHeadersWidth = 51;
-            dgvMyDocs.Size = new Size(800, 339);
-            dgvMyDocs.TabIndex = 2;
-            // 
-            // btnDownload
-            // 
-            btnDownload.Location = new Point(13, 60);
-            btnDownload.Name = "btnDownload";
-            btnDownload.Size = new Size(94, 29);
-            btnDownload.TabIndex = 7;
-            btnDownload.Text = "button2";
-            btnDownload.UseVisualStyleBackColor = true;
-            // 
-            // btnUpdate
-            // 
-            btnUpdate.Location = new Point(311, 60);
-            btnUpdate.Name = "btnUpdate";
-            btnUpdate.Size = new Size(94, 29);
-            btnUpdate.TabIndex = 8;
-            btnUpdate.Text = "button2";
-            btnUpdate.UseVisualStyleBackColor = true;
+            btnDelete.Location = new Point(583, 61);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(94, 29);
+            btnDelete.TabIndex = 11;
+            btnDelete.Text = "button5";
+            btnDelete.UseVisualStyleBackColor = true;
             // 
             // btnPrint
             // 
@@ -99,14 +80,33 @@
             btnPrint.Text = "button4";
             btnPrint.UseVisualStyleBackColor = true;
             // 
-            // btnDelete
+            // btnUpdate
             // 
-            btnDelete.Location = new Point(583, 61);
-            btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(94, 29);
-            btnDelete.TabIndex = 11;
-            btnDelete.Text = "button5";
-            btnDelete.UseVisualStyleBackColor = true;
+            btnUpdate.Location = new Point(311, 60);
+            btnUpdate.Name = "btnUpdate";
+            btnUpdate.Size = new Size(94, 29);
+            btnUpdate.TabIndex = 8;
+            btnUpdate.Text = "button2";
+            btnUpdate.UseVisualStyleBackColor = true;
+            // 
+            // btnDownload
+            // 
+            btnDownload.Location = new Point(13, 60);
+            btnDownload.Name = "btnDownload";
+            btnDownload.Size = new Size(94, 29);
+            btnDownload.TabIndex = 7;
+            btnDownload.Text = "button2";
+            btnDownload.UseVisualStyleBackColor = true;
+            // 
+            // dgvMyDocs
+            // 
+            dgvMyDocs.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMyDocs.Dock = DockStyle.Fill;
+            dgvMyDocs.Location = new Point(0, 111);
+            dgvMyDocs.Name = "dgvMyDocs";
+            dgvMyDocs.RowHeadersWidth = 51;
+            dgvMyDocs.Size = new Size(800, 339);
+            dgvMyDocs.TabIndex = 2;
             // 
             // FrmBelgelerim
             // 
