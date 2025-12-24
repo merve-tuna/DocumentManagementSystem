@@ -75,6 +75,7 @@
             pnlDropZone.Name = "pnlDropZone";
             pnlDropZone.Size = new Size(335, 255);
             pnlDropZone.TabIndex = 1;
+            pnlDropZone.Click += pnlDropZone_Click;
             pnlDropZone.Paint += panel1_Paint;
             // 
             // label6

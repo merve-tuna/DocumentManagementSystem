@@ -54,6 +54,7 @@
             dtpEndDate = new DateTimePicker();
             dtpStartDate = new DateTimePicker();
             dgvDocuments = new DataGridView();
+            lblSelectionCount = new Label();
             pnlSidebar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)lblUserIcon).BeginInit();
             pnlHeader.SuspendLayout();
@@ -162,6 +163,7 @@
             // 
             // pnlHeader
             // 
+            pnlHeader.Controls.Add(lblSelectionCount);
             pnlHeader.Controls.Add(lblRecordCount);
             pnlHeader.Controls.Add(panel1);
             pnlHeader.Controls.Add(label5);
@@ -324,6 +326,15 @@
             dgvDocuments.Size = new Size(800, 450);
             dgvDocuments.TabIndex = 2;
             // 
+            // lblSelectionCount
+            // 
+            lblSelectionCount.AutoSize = true;
+            lblSelectionCount.Location = new Point(218, 117);
+            lblSelectionCount.Name = "lblSelectionCount";
+            lblSelectionCount.Size = new Size(50, 20);
+            lblSelectionCount.TabIndex = 27;
+            lblSelectionCount.Text = "label1";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -372,5 +383,6 @@
         private TextBox txtSearch;
         private Button btnSearch;
         private Label lblRecordCount;
+        private Label lblSelectionCount;
     }
 }
