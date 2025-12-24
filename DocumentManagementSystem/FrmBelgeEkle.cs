@@ -14,6 +14,8 @@ namespace DocumentManagementSystem
 {
     public partial class FrmBelgeEkle : Form
     {
+        private string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=DocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
+
         // --- DEĞİŞKENLER ---
         private int _currentUserId = 1;
         private string _currentUserRole = "Admin";
@@ -25,8 +27,7 @@ namespace DocumentManagementSystem
         {
             InitializeComponent();
             SetupUI();
-            LoadDepartments();
-            LoadCategories();
+            LoadComboBoxes();
         }
 
         // --- BAŞLANGIÇ AYARLARI ---
@@ -89,91 +90,64 @@ namespace DocumentManagementSystem
             btnClear.Enabled = false;
             hasUnsavedChanges = false;
         }
-        private void LoadDepartments()
-        {
-            try
-            {
-                // ComboBox'ı temizle
-                cmbDepartment.Items.Clear();
-                cmbDepartment.Items.Add("Seçiniz..."); // İlk boş seçenek
-
-                // Stored Procedure kullanarak verileri çek
-                DataTable dt = SqlHelper.GetDataByProcedure("sp_GetDepartments");
-
-                foreach (DataRow row in dt.Rows)
-                {
-                    cmbDepartment.Items.Add(row["DepartmentName"].ToString());
-                }
-
-                // Varsayılan olarak ilk seçeneği seç
-                if (cmbDepartment.Items.Count > 0)
-                    cmbDepartment.SelectedIndex = 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Departmanlar yüklenirken hata: {ex.Message}",
-                    "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+       
 
 
 
-        private void LoadCategories()
-        {
-            try
-            {
-                // ComboBox'ı temizle
-                cmbCategory.Items.Clear();
-                cmbCategory.Items.Add("Seçiniz..."); // İlk boş seçenek
-
-                // Stored Procedure kullanarak verileri çek
-                DataTable dt = SqlHelper.GetDataByProcedure("sp_GetCategories");
-
-                foreach (DataRow row in dt.Rows)
-                {
-                    cmbCategory.Items.Add(row["CategoryName"].ToString());
-                }
-
-                // Varsayılan olarak ilk seçeneği seç
-                if (cmbCategory.Items.Count > 0)
-                    cmbCategory.SelectedIndex = 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Kategoriler yüklenirken hata: {ex.Message}",
-                    "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         // Belge Kaydetme Metodu
-        private void SaveDocument()
+        private void SaveDocument() // Bu metodun adını değiştirmeyin, içeriğini güncelleyin
         {
-            // Validasyon
-            if (string.IsNullOrWhiteSpace(txtDocName.Text))
+            // 1. Validasyonlar
+            if (string.IsNullOrWhiteSpace(txtDocName.Text) ||
+                cmbDepartment.SelectedIndex == -1 ||
+                cmbCategory.SelectedIndex == -1 ||
+                string.IsNullOrEmpty(selectedFilePath))
             {
-                MessageBox.Show("Belge adı zorunludur!", "Uyarı",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtDocName.Focus();
+                MessageBox.Show("Lütfen tüm alanları doldurunuz ve bir dosya seçiniz.", "Eksik Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (cmbDepartment.SelectedIndex <= 0)
+            // 2. SQL İşlemleri
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                MessageBox.Show("Departman seçmelisiniz!", "Uyarı",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cmbDepartment.Focus();
-                return;
-            }
+                try
+                {
+                    conn.Open();
+                    int statusId = (_currentUserRole == "Admin") ? 3 : 2;
 
-            try
-            {
-                MessageBox.Show("Belge kaydetme işlemi hazırlanıyor...",
-                    "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Belge kaydedilirken hata: {ex.Message}",
-                    "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string query = @"INSERT INTO Documents 
+                            (DocumentName, DepartmentID, CategoryID, Description, FilePath, UploadedByUserID, StatusID, UploadDate) 
+                            VALUES 
+                            (@DocumentName, @DepartmentName, @CategoryName, @Description, @FilePath, @UserName, @StatusName, GETDATE())";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@DocumentName", txtDocName.Text);
+                        cmd.Parameters.AddWithValue("@DepartmentName", cmbDepartment.SelectedValue);
+                        cmd.Parameters.AddWithValue("@CategoryName", cmbCategory.SelectedValue);
+                        cmd.Parameters.AddWithValue("@Description", txtDescription.Text);
+                        cmd.Parameters.AddWithValue("@FilePath", selectedFilePath);
+                        cmd.Parameters.AddWithValue("@UserName", _currentUserId);
+                        cmd.Parameters.AddWithValue("@StatusName", statusId);
+
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            MessageBox.Show("Belge başarıyla veritabanına kaydedildi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // Ekranı temizle ve butonları ayarla
+                            btnAction.Enabled = false;
+                            btnClear.Enabled = true;
+                            hasUnsavedChanges = false;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Veritabanı hatası: " + ex.Message);
+                }
             }
         }
 
@@ -283,5 +257,45 @@ namespace DocumentManagementSystem
 
             hasUnsavedChanges = true;
         }
+            private void LoadComboBoxes()
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+
+                    // --- DEPARTMANLARI YÜKLE ---
+                    // DİKKAT: SQL sorgusunda 'DepartmentID' yazdığından emin olun.
+                    // Eğer veritabanınızda bu sütunun adı 'ID' ise burayı düzeltmelisiniz.
+                    SqlDataAdapter daDept = new SqlDataAdapter("SELECT DepartmentID, DepartmentName FROM Departments WHERE IsActive=1", conn);
+                    DataTable dtDept = new DataTable();
+                    daDept.Fill(dtDept);
+
+                    // ÖNCE AYARLARI YAP
+                    cmbDepartment.DisplayMember = "DepartmentName"; // Ekranda görünecek
+                    cmbDepartment.ValueMember = "DepartmentID";     // Arkada tutulacak ID
+
+                    // SONRA VERİYİ VER
+                    cmbDepartment.DataSource = dtDept;
+                    cmbDepartment.SelectedIndex = -1; // Seçimi temizle
+
+                    // --- KATEGORİLERİ YÜKLE ---
+                    SqlDataAdapter daCat = new SqlDataAdapter("SELECT CategoryID, CategoryName FROM Categories WHERE IsActive=1", conn);
+                    DataTable dtCat = new DataTable();
+                    daCat.Fill(dtCat);
+
+                    cmbCategory.DisplayMember = "CategoryName";
+                    cmbCategory.ValueMember = "CategoryID";
+                    cmbCategory.DataSource = dtCat;
+                    cmbCategory.SelectedIndex = -1;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Veri yükleme hatası: " + ex.Message);
+                }
+            }
+        }
     }
-}
+    }
+
