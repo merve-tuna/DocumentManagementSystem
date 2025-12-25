@@ -25,10 +25,30 @@ namespace DocumentManagementSystem
             LoadDepartmentsForFilter();
             LoadCategoriesForFilter();
             LoadInitialData();
+            RefreshDocumentList();
 
         }
 
 
+        private void RefreshDocumentList()
+        {
+            try
+            {
+                // SqlHelper sayesinde connectionString ile uðraþmana gerek kalmaz
+                // Sadece prosedür ismini vermen yeterlidir
+                DataTable dt = SqlHelper.GetDataByProcedure("sp_GetDocuments");
+
+                // dgvDocuments senin DataGridView nesnenin ismidir
+                if (dt != null)
+                {
+                    dgvDocuments.DataSource = dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Listeleme sýrasýnda bir hata oluþtu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void SetupUI()
         {

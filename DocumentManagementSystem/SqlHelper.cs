@@ -7,38 +7,24 @@ namespace DocumentManagementSystem
 {
     public static class SqlHelper
     {
-        private static string connectionString =
-    @"Data Source=.\SQLEXPRESS;Initial Catalog=DocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
+        private static string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=DocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
 
-        // Alternatif: App.config'den okumak için
-        // private static string connectionString = ConfigurationManager.ConnectionStrings["MyConnString"].ConnectionString;
-
-        // Stored Procedure ile veri çekme
+        // 1. VERİ ÇEKME (Listeleme ve ComboBox doldurma için)
         public static DataTable GetDataByProcedure(string procedureName, SqlParameter[] parameters = null)
         {
             DataTable dt = new DataTable();
-
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(procedureName, conn))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure; // Bu satır önemli!
-
-                    if (parameters != null)
-                        cmd.Parameters.AddRange(parameters);
-
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    if (parameters != null) cmd.Parameters.AddRange(parameters);
                     try
                     {
                         conn.Open();
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) { da.Fill(dt); }
                     }
-                    catch (Exception ex)
-                    {
-                        throw new Exception($"Stored Procedure hatası [{procedureName}]: " + ex.Message);
-                    }
+                    catch (Exception ex) { throw new Exception($"GetData Hatası [{procedureName}]: " + ex.Message); }
                 }
             }
             return dt;

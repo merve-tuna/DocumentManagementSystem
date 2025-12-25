@@ -93,61 +93,47 @@ namespace DocumentManagementSystem
         }
 
         // --- KAYDETME İŞLEMİ ---
+
         private void SaveDocument()
         {
-            // Validasyonlar
-            if (string.IsNullOrWhiteSpace(txtDocName.Text) ||
-                cmbDepartment.SelectedIndex == -1 ||
-                cmbCategory.SelectedIndex == -1 ||
-                string.IsNullOrEmpty(selectedFilePath))
+            // 1. Validasyonlar (Aynı kalıyor)
+            if (string.IsNullOrWhiteSpace(txtDocName.Text) || cmbDepartment.SelectedIndex == -1 ||
+                cmbCategory.SelectedIndex == -1 || string.IsNullOrEmpty(selectedFilePath))
             {
-                MessageBox.Show("Lütfen tüm alanları doldurunuz ve bir dosya seçiniz.", "Eksik Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen tüm alanları doldurunuz.", "Uyarı");
                 return;
             }
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
-                try
+                // 2. Parametreleri SQL'deki isimlerle BİREBİR EŞLEŞTİRİYORUZ
+                SqlParameter[] p = {
+            new SqlParameter("@DocumentName", txtDocName.Text),
+            new SqlParameter("@Description", txtDescription.Text),
+            new SqlParameter("@FileType", Path.GetExtension(selectedFilePath)), // Uzantı
+            new SqlParameter("@FileSize", new FileInfo(selectedFilePath).Length), // Boyut
+            new SqlParameter("@CategoryID", Convert.ToInt32(cmbCategory.SelectedValue)),
+            new SqlParameter("@DepartmentID", Convert.ToInt32(cmbDepartment.SelectedValue)),
+            new SqlParameter("@UploadedByUserID", _currentUserId)
+        };
+
+                // 3. SqlHelper üzerinden prosedürü çağır
+                int sonuc = SqlHelper.ExecuteProcedure("sp_InsertDocument", p);
+
+                if (sonuc > 0)
                 {
-                    conn.Open();
-                    int statusId = (_currentUserRole == "Admin") ? 3 : 2;
-
-                    string query = @"INSERT INTO Documents 
-                                    (DocumentName, DepartmentID, CategoryID, Description, UploadedByUserID, StatusID, UploadDate) 
-                                    VALUES 
-                                    (@Name, @Dept, @Cat, @Desc, @User, @Status, GETDATE())";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        // Parametreleri Güvenli Ekleme
-                        cmd.Parameters.AddWithValue("@Name", txtDocName.Text);
-
-                        // ID'leri int'e çevirerek alıyoruz (Hata buradaydı, artık çözüldü)
-                        cmd.Parameters.AddWithValue("@Dept", Convert.ToInt32(cmbDepartment.SelectedValue));
-                        cmd.Parameters.AddWithValue("@Cat", Convert.ToInt32(cmbCategory.SelectedValue));
-
-                        cmd.Parameters.AddWithValue("@Desc", txtDescription.Text);
-                        cmd.Parameters.AddWithValue("@Path", selectedFilePath);
-                        cmd.Parameters.AddWithValue("@User", _currentUserId);
-                        cmd.Parameters.AddWithValue("@Status", statusId);
-
-                        int result = cmd.ExecuteNonQuery();
-
-                        if (result > 0)
-                        {
-                            MessageBox.Show("Belge başarıyla kaydedildi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            btnAction.Enabled = false;
-                            btnClear.Enabled = true;
-                            hasUnsavedChanges = false;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Veritabanı hatası:\n" + ex.Message);
+                    MessageBox.Show("Belge başarıyla veritabanına kaydedildi!", "Başarılı");
+                    this.Close();
                 }
             }
+            catch (Exception ex)
+            {
+                // image_07bcae.png'deki hatayı burası yakalar
+                MessageBox.Show("Kayıt hatası: " + ex.Message);
+            }
         }
+
+
 
         // --- BUTON TIKLAMALARI ---
         private void btnAction_Click(object sender, EventArgs e)
