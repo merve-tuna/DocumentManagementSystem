@@ -74,7 +74,7 @@
             pnlSidebar.Controls.Add(lblUserIconA);
             pnlSidebar.Dock = DockStyle.Left;
             pnlSidebar.Location = new Point(0, 0);
-            pnlSidebar.Margin = new Padding(4, 4, 4, 4);
+            pnlSidebar.Margin = new Padding(4);
             pnlSidebar.Name = "pnlSidebar";
             pnlSidebar.Size = new Size(250, 562);
             pnlSidebar.TabIndex = 0;
@@ -83,7 +83,7 @@
             // 
             lblUserIcon.Image = (Image)resources.GetObject("lblUserIcon.Image");
             lblUserIcon.Location = new Point(20, 15);
-            lblUserIcon.Margin = new Padding(4, 4, 4, 4);
+            lblUserIcon.Margin = new Padding(4);
             lblUserIcon.Name = "lblUserIcon";
             lblUserIcon.Size = new Size(50, 39);
             lblUserIcon.SizeMode = PictureBoxSizeMode.Zoom;
@@ -94,7 +94,7 @@
             // 
             btnHelp.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
             btnHelp.Location = new Point(15, 345);
-            btnHelp.Margin = new Padding(4, 4, 4, 4);
+            btnHelp.Margin = new Padding(4);
             btnHelp.Name = "btnHelp";
             btnHelp.Size = new Size(212, 44);
             btnHelp.TabIndex = 4;
@@ -105,7 +105,7 @@
             // 
             btnTrash.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
             btnTrash.Location = new Point(15, 294);
-            btnTrash.Margin = new Padding(4, 4, 4, 4);
+            btnTrash.Margin = new Padding(4);
             btnTrash.Name = "btnTrash";
             btnTrash.Size = new Size(212, 44);
             btnTrash.TabIndex = 3;
@@ -116,7 +116,7 @@
             // 
             btnPendingApproval.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
             btnPendingApproval.Location = new Point(15, 242);
-            btnPendingApproval.Margin = new Padding(4, 4, 4, 4);
+            btnPendingApproval.Margin = new Padding(4);
             btnPendingApproval.Name = "btnPendingApproval";
             btnPendingApproval.Size = new Size(212, 44);
             btnPendingApproval.TabIndex = 2;
@@ -127,7 +127,7 @@
             // 
             btnMyDocuments.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
             btnMyDocuments.Location = new Point(15, 191);
-            btnMyDocuments.Margin = new Padding(4, 4, 4, 4);
+            btnMyDocuments.Margin = new Padding(4);
             btnMyDocuments.Name = "btnMyDocuments";
             btnMyDocuments.Size = new Size(212, 44);
             btnMyDocuments.TabIndex = 1;
@@ -138,7 +138,7 @@
             // 
             btnDocumentAdd.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
             btnDocumentAdd.Location = new Point(15, 140);
-            btnDocumentAdd.Margin = new Padding(4, 4, 4, 4);
+            btnDocumentAdd.Margin = new Padding(4);
             btnDocumentAdd.Name = "btnDocumentAdd";
             btnDocumentAdd.Size = new Size(212, 44);
             btnDocumentAdd.TabIndex = 0;
@@ -151,7 +151,7 @@
             cmbUserRole.Font = new Font("Arial", 9F);
             cmbUserRole.FormattingEnabled = true;
             cmbUserRole.Location = new Point(78, 20);
-            cmbUserRole.Margin = new Padding(4, 4, 4, 4);
+            cmbUserRole.Margin = new Padding(4);
             cmbUserRole.Name = "cmbUserRole";
             cmbUserRole.Size = new Size(149, 29);
             cmbUserRole.TabIndex = 12;
@@ -187,7 +187,7 @@
             pnlHeader.Controls.Add(dtpStartDate);
             pnlHeader.Dock = DockStyle.Top;
             pnlHeader.Location = new Point(250, 0);
-            pnlHeader.Margin = new Padding(4, 4, 4, 4);
+            pnlHeader.Margin = new Padding(4);
             pnlHeader.Name = "pnlHeader";
             pnlHeader.Size = new Size(750, 184);
             pnlHeader.TabIndex = 1;
@@ -218,7 +218,7 @@
             panel1.Controls.Add(txtSearch);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
-            panel1.Margin = new Padding(4, 4, 4, 4);
+            panel1.Margin = new Padding(4);
             panel1.Name = "panel1";
             panel1.Size = new Size(750, 54);
             panel1.TabIndex = 25;
@@ -226,7 +226,7 @@
             // btnSearch
             // 
             btnSearch.Location = new Point(628, 15);
-            btnSearch.Margin = new Padding(4, 4, 4, 4);
+            btnSearch.Margin = new Padding(4);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(119, 38);
             btnSearch.TabIndex = 26;
@@ -237,7 +237,7 @@
             // txtSearch
             // 
             txtSearch.Location = new Point(11, 15);
-            txtSearch.Margin = new Padding(4, 4, 4, 4);
+            txtSearch.Margin = new Padding(4);
             txtSearch.Name = "txtSearch";
             txtSearch.Size = new Size(612, 31);
             txtSearch.TabIndex = 25;
@@ -291,7 +291,7 @@
             // 
             btnClear.Font = new Font("Arial", 9F);
             btnClear.Location = new Point(628, 140);
-            btnClear.Margin = new Padding(4, 4, 4, 4);
+            btnClear.Margin = new Padding(4);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(119, 38);
             btnClear.TabIndex = 19;
@@ -303,7 +303,7 @@
             // 
             btnFilter.Font = new Font("Arial", 9F);
             btnFilter.Location = new Point(628, 86);
-            btnFilter.Margin = new Padding(4, 4, 4, 4);
+            btnFilter.Margin = new Padding(4);
             btnFilter.Name = "btnFilter";
             btnFilter.Size = new Size(119, 38);
             btnFilter.TabIndex = 18;
@@ -316,7 +316,7 @@
             cmbCategory.Font = new Font("Arial", 9F);
             cmbCategory.FormattingEnabled = true;
             cmbCategory.Location = new Point(484, 91);
-            cmbCategory.Margin = new Padding(4, 4, 4, 4);
+            cmbCategory.Margin = new Padding(4);
             cmbCategory.Name = "cmbCategory";
             cmbCategory.Size = new Size(139, 29);
             cmbCategory.TabIndex = 17;
@@ -326,7 +326,7 @@
             cmbDepartment.Font = new Font("Arial", 9F);
             cmbDepartment.FormattingEnabled = true;
             cmbDepartment.Location = new Point(326, 91);
-            cmbDepartment.Margin = new Padding(4, 4, 4, 4);
+            cmbDepartment.Margin = new Padding(4);
             cmbDepartment.Name = "cmbDepartment";
             cmbDepartment.Size = new Size(139, 29);
             cmbDepartment.TabIndex = 16;
@@ -335,7 +335,7 @@
             // 
             dtpEndDate.Font = new Font("Arial", 9F);
             dtpEndDate.Location = new Point(169, 91);
-            dtpEndDate.Margin = new Padding(4, 4, 4, 4);
+            dtpEndDate.Margin = new Padding(4);
             dtpEndDate.Name = "dtpEndDate";
             dtpEndDate.Size = new Size(139, 28);
             dtpEndDate.TabIndex = 15;
@@ -344,7 +344,7 @@
             // 
             dtpStartDate.Font = new Font("Arial", 9F);
             dtpStartDate.Location = new Point(11, 91);
-            dtpStartDate.Margin = new Padding(4, 4, 4, 4);
+            dtpStartDate.Margin = new Padding(4);
             dtpStartDate.Name = "dtpStartDate";
             dtpStartDate.Size = new Size(139, 28);
             dtpStartDate.TabIndex = 14;
@@ -352,13 +352,12 @@
             // dgvDocuments
             // 
             dgvDocuments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDocuments.Dock = DockStyle.Fill;
-            dgvDocuments.Location = new Point(0, 0);
-            dgvDocuments.Margin = new Padding(4, 4, 4, 4);
+            dgvDocuments.Location = new Point(250, 186);
+            dgvDocuments.Margin = new Padding(4);
             dgvDocuments.Name = "dgvDocuments";
             dgvDocuments.RowHeadersWidth = 51;
             dgvDocuments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDocuments.Size = new Size(1000, 562);
+            dgvDocuments.Size = new Size(750, 376);
             dgvDocuments.TabIndex = 2;
             // 
             // Form1
@@ -369,7 +368,7 @@
             Controls.Add(pnlHeader);
             Controls.Add(pnlSidebar);
             Controls.Add(dgvDocuments);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             Name = "Form1";
             Text = "Form1";
             pnlSidebar.ResumeLayout(false);
