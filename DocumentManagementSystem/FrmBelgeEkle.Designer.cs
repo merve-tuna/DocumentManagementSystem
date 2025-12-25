@@ -87,7 +87,7 @@
             label6.TabIndex = 1;
             label6.Text = "Belgeyi Buraya Sürükleyin \r\nveya \r\nTıklayıp Seçin";
             label6.TextAlign = ContentAlignment.TopCenter;
-            label6.Click += label6_Click;
+            label6.Click += pnlDropZone_Click;
             // 
             // pictureBox1
             // 
@@ -99,6 +99,7 @@
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
+            pictureBox1.Click += pnlDropZone_Click;
             // 
             // lblSelectedFile
             // 
@@ -186,9 +187,9 @@
             label3.AutoSize = true;
             label3.Location = new Point(6, 164);
             label3.Name = "label3";
-            label3.Size = new Size(66, 20);
+            label3.Size = new Size(76, 20);
             label3.TabIndex = 9;
-            label3.Text = "Kategori";
+            label3.Text = "Kategori *";
             // 
             // label2
             // 

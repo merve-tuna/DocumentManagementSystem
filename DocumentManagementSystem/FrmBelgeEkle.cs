@@ -14,6 +14,7 @@ namespace DocumentManagementSystem
 {
     public partial class FrmBelgeEkle : Form
     {
+        // 1. BAĞLANTI ADRESİN (Kendi bilgisayar adına göre kontrol et)
         private string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=DocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
 
         // --- DEĞİŞKENLER ---
@@ -23,30 +24,29 @@ namespace DocumentManagementSystem
         private string selectedFilePath = "";
         private bool hasUnsavedChanges = false;
 
+        // --- YAPICI METOD (Program ilk açıldığında burası çalışır) ---
         public FrmBelgeEkle()
         {
             InitializeComponent();
             SetupUI();
+
+            // DİKKAT: Artık eski metodları değil, bunu çağırıyoruz
             LoadComboBoxes();
         }
 
         // --- BAŞLANGIÇ AYARLARI ---
         private void SetupUI()
         {
-            // Panel özelliklerini aç
-            pnlDropZone.AllowDrop = true; // Sürükle bırak için bu ZORUNLUDUR
+            pnlDropZone.AllowDrop = true;
 
             // Event Bağlantıları
-   
             this.FormClosing += FrmBelgeEkle_FormClosing;
 
-            // Sürükle Bırak Eventleri
-            pnlDropZone.DragEnter += pnlDropZone_DragEnter; // İçeri girince
-            pnlDropZone.DragLeave += pnlDropZone_DragLeave; // Sürüklerken vazgeçip dışarı çıkarsa
-            pnlDropZone.DragDrop += pnlDropZone_DragDrop;   // Bırakınca
-            pnlDropZone.Click += pnlDropZone_Click;         // Tıklayınca
+            pnlDropZone.DragEnter += pnlDropZone_DragEnter;
+            pnlDropZone.DragLeave += pnlDropZone_DragLeave;
+            pnlDropZone.DragDrop += pnlDropZone_DragDrop;
+            pnlDropZone.Click += pnlDropZone_Click;
 
-            // Diğer butonlar
             btnAction.Click += btnAction_Click;
             btnClear.Click += btnClear_Click;
 
@@ -55,209 +55,8 @@ namespace DocumentManagementSystem
             if (cmbDepartment != null) cmbDepartment.SelectedIndexChanged += (s, e) => hasUnsavedChanges = true;
         }
 
-
-        // 2. FORM KAPANIRKEN ÇALIŞACAK METOD (FormClosing Hatası İçin)
-        // Dikkat: Burada 'FormClosingEventArgs' kullanılmalıdır.
-        private void FrmBelgeEkle_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (hasUnsavedChanges)
-            {
-                DialogResult dr = MessageBox.Show(
-                    "Kaydetmediğiniz değişiklikler var. Çıkmak istediğinize emin misiniz?",
-                    "Uyarı",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning);
-
-                if (dr == DialogResult.No)
-                {
-                    e.Cancel = true; // Kapatmayı iptal et
-                }
-            }
-        }
-
-        // 3. TEMİZLE BUTONU METODU (btnClear Hatası İçin)
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            txtDocName.Clear();
-            txtDescription.Clear();
-            cmbDepartment.SelectedIndex = -1;
-            cmbCategory.SelectedIndex = -1;
-            selectedFilePath = "";
-            lblSelectedFile.Text = "Dosya Seçilmedi";
-            lblSelectedFile.ForeColor = Color.Black;
-
-            btnAction.Enabled = true;
-            btnClear.Enabled = false;
-            hasUnsavedChanges = false;
-        }
-       
-
-
-
-
-        // Belge Kaydetme Metodu
-        private void SaveDocument() // Bu metodun adını değiştirmeyin, içeriğini güncelleyin
-        {
-            // 1. Validasyonlar
-            if (string.IsNullOrWhiteSpace(txtDocName.Text) ||
-                cmbDepartment.SelectedIndex == -1 ||
-                cmbCategory.SelectedIndex == -1 ||
-                string.IsNullOrEmpty(selectedFilePath))
-            {
-                MessageBox.Show("Lütfen tüm alanları doldurunuz ve bir dosya seçiniz.", "Eksik Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // 2. SQL İşlemleri
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    int statusId = (_currentUserRole == "Admin") ? 3 : 2;
-
-                    string query = @"INSERT INTO Documents 
-                            (DocumentName, DepartmentID, CategoryID, Description, FilePath, UploadedByUserID, StatusID, UploadDate) 
-                            VALUES 
-                            (@DocumentName, @DepartmentName, @CategoryName, @Description, @FilePath, @UserName, @StatusName, GETDATE())";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@DocumentName", txtDocName.Text);
-                        cmd.Parameters.AddWithValue("@DepartmentName", cmbDepartment.SelectedValue);
-                        cmd.Parameters.AddWithValue("@CategoryName", cmbCategory.SelectedValue);
-                        cmd.Parameters.AddWithValue("@Description", txtDescription.Text);
-                        cmd.Parameters.AddWithValue("@FilePath", selectedFilePath);
-                        cmd.Parameters.AddWithValue("@UserName", _currentUserId);
-                        cmd.Parameters.AddWithValue("@StatusName", statusId);
-
-                        int result = cmd.ExecuteNonQuery();
-
-                        if (result > 0)
-                        {
-                            MessageBox.Show("Belge başarıyla veritabanına kaydedildi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            // Ekranı temizle ve butonları ayarla
-                            btnAction.Enabled = false;
-                            btnClear.Enabled = true;
-                            hasUnsavedChanges = false;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Veritabanı hatası: " + ex.Message);
-                }
-            }
-        }
-
-
-
-
-
-
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.Close(); // Bu sayfayı kapatır (Böylece ana sayfa otomatik açılır)
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void lblSelectedFile_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnAction_Click(object sender, EventArgs e)
-        {
-            SaveDocument();
-        }
-
-        // --- SÜRÜKLE BIRAK & DOSYA SEÇME ---
-        // 1. SÜRÜKLEME BAŞLADIĞINDA (Kullanıcı dosyayı panelin üzerine getirdi)
-        private void pnlDropZone_DragEnter(object sender, DragEventArgs e)
-        {
-            // Eğer sürüklenen şey bir dosya ise ikonunu değiştir
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effect = DragDropEffects.Copy;
-                pnlDropZone.BackColor = Color.LightBlue; // Görsel efekt: Renk değişsin
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
-        }
-
-        // 2. SÜRÜKLEME İPTAL OLURSA (Kullanıcı panelin üzerine geldi ama bırakmadan çıktı)
-        private void pnlDropZone_DragLeave(object sender, EventArgs e)
-        {
-            pnlDropZone.BackColor = Color.WhiteSmoke; // Rengi eski haline döndür (veya panelin orijinal rengi neyse)
-        }
-
-        // 3. DOSYA BIRAKILDIĞINDA
-        private void pnlDropZone_DragDrop(object sender, DragEventArgs e)
-        {
-            pnlDropZone.BackColor = Color.WhiteSmoke; // Rengi düzelt
-
-            // Dosyaları al
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-            if (files.Length > 0)
-            {
-                // Sadece ilk dosyayı alıyoruz (Çoklu yükleme yapmayacaksak)
-                SelectFile(files[0]);
-            }
-        }
-
-        // 4. PANELE TIKLANIP DOSYA SEÇİLDİĞİNDE
-        private void pnlDropZone_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog ofd = new OpenFileDialog())
-            {
-                ofd.Title = "Yüklenecek Belgeyi Seçin";
-                // Kullanıcının sadece belirli dosyaları görmesini sağla
-                ofd.Filter = "Belgeler|*.pdf;*.docx;*.doc;*.xlsx;*.xls;*.txt|Resimler|*.jpg;*.jpeg;*.png|Tüm Dosyalar|*.*";
-
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    SelectFile(ofd.FileName);
-                }
-            }
-        }
-
-        // ORTAK DOSYA İŞLEME METODU (Değişmedi, aynen kalabilir)
-        private void SelectFile(string path)
-        {
-            selectedFilePath = path;
-
-            // Dosya adını ekrana yaz
-            lblSelectedFile.Text = Path.GetFileName(path);
-            lblSelectedFile.ForeColor = Color.Green;
-
-            // Otomatik olarak belge adı boşsa, dosya adını oraya da yazabiliriz (İsteğe bağlı)
-            if (string.IsNullOrWhiteSpace(txtDocName.Text))
-            {
-                txtDocName.Text = Path.GetFileNameWithoutExtension(path);
-            }
-
-            hasUnsavedChanges = true;
-        }
-            private void LoadComboBoxes()
+        // --- COMBOBOX DOLDURMA (EN ÖNEMLİ KISIM) ---
+        private void LoadComboBoxes()
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -265,22 +64,18 @@ namespace DocumentManagementSystem
                 {
                     conn.Open();
 
-                    // --- DEPARTMANLARI YÜKLE ---
-                    // DİKKAT: SQL sorgusunda 'DepartmentID' yazdığından emin olun.
-                    // Eğer veritabanınızda bu sütunun adı 'ID' ise burayı düzeltmelisiniz.
+                    // 1. DEPARTMANLARI YÜKLE
+                    // NOT: Veritabanında sütun adın 'ID' ise burayı 'ID' yap, 'DepartmentID' ise böyle kalsın.
                     SqlDataAdapter daDept = new SqlDataAdapter("SELECT DepartmentID, DepartmentName FROM Departments WHERE IsActive=1", conn);
                     DataTable dtDept = new DataTable();
                     daDept.Fill(dtDept);
 
-                    // ÖNCE AYARLARI YAP
-                    cmbDepartment.DisplayMember = "DepartmentName"; // Ekranda görünecek
-                    cmbDepartment.ValueMember = "DepartmentID";     // Arkada tutulacak ID
-
-                    // SONRA VERİYİ VER
+                    cmbDepartment.DisplayMember = "DepartmentName"; // Ekranda görünen
+                    cmbDepartment.ValueMember = "DepartmentID";     // Arkadaki ID (SQL'e bu gidecek)
                     cmbDepartment.DataSource = dtDept;
-                    cmbDepartment.SelectedIndex = -1; // Seçimi temizle
+                    cmbDepartment.SelectedIndex = -1;
 
-                    // --- KATEGORİLERİ YÜKLE ---
+                    // 2. KATEGORİLERİ YÜKLE
                     SqlDataAdapter daCat = new SqlDataAdapter("SELECT CategoryID, CategoryName FROM Categories WHERE IsActive=1", conn);
                     DataTable dtCat = new DataTable();
                     daCat.Fill(dtCat);
@@ -296,6 +91,144 @@ namespace DocumentManagementSystem
                 }
             }
         }
-    }
-    }
 
+        // --- KAYDETME İŞLEMİ ---
+        private void SaveDocument()
+        {
+            // Validasyonlar
+            if (string.IsNullOrWhiteSpace(txtDocName.Text) ||
+                cmbDepartment.SelectedIndex == -1 ||
+                cmbCategory.SelectedIndex == -1 ||
+                string.IsNullOrEmpty(selectedFilePath))
+            {
+                MessageBox.Show("Lütfen tüm alanları doldurunuz ve bir dosya seçiniz.", "Eksik Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    int statusId = (_currentUserRole == "Admin") ? 3 : 2;
+
+                    string query = @"INSERT INTO Documents 
+                                    (DocumentName, DepartmentID, CategoryID, Description, UploadedByUserID, StatusID, UploadDate) 
+                                    VALUES 
+                                    (@Name, @Dept, @Cat, @Desc, @User, @Status, GETDATE())";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        // Parametreleri Güvenli Ekleme
+                        cmd.Parameters.AddWithValue("@Name", txtDocName.Text);
+
+                        // ID'leri int'e çevirerek alıyoruz (Hata buradaydı, artık çözüldü)
+                        cmd.Parameters.AddWithValue("@Dept", Convert.ToInt32(cmbDepartment.SelectedValue));
+                        cmd.Parameters.AddWithValue("@Cat", Convert.ToInt32(cmbCategory.SelectedValue));
+
+                        cmd.Parameters.AddWithValue("@Desc", txtDescription.Text);
+                        cmd.Parameters.AddWithValue("@Path", selectedFilePath);
+                        cmd.Parameters.AddWithValue("@User", _currentUserId);
+                        cmd.Parameters.AddWithValue("@Status", statusId);
+
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            MessageBox.Show("Belge başarıyla kaydedildi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            btnAction.Enabled = false;
+                            btnClear.Enabled = true;
+                            hasUnsavedChanges = false;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Veritabanı hatası:\n" + ex.Message);
+                }
+            }
+        }
+
+        // --- BUTON TIKLAMALARI ---
+        private void btnAction_Click(object sender, EventArgs e)
+        {
+            SaveDocument();
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtDocName.Clear();
+            txtDescription.Clear();
+            cmbDepartment.SelectedIndex = -1;
+            cmbCategory.SelectedIndex = -1;
+            selectedFilePath = "";
+            lblSelectedFile.Text = "Dosya Seçilmedi";
+            lblSelectedFile.ForeColor = Color.Black;
+
+            btnAction.Enabled = true;
+            btnClear.Enabled = false;
+            hasUnsavedChanges = false;
+        }
+
+        // --- FORM KAPATMA ---
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void FrmBelgeEkle_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (hasUnsavedChanges)
+            {
+                DialogResult dr = MessageBox.Show("Kaydetmediğiniz değişiklikler var. Çıkmak istediğinize emin misiniz?", "Uyarı", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (dr == DialogResult.No) e.Cancel = true;
+            }
+        }
+
+        // --- SÜRÜKLE BIRAK (DRAG DROP) ---
+        private void pnlDropZone_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+                pnlDropZone.BackColor = Color.LightBlue;
+            }
+            else e.Effect = DragDropEffects.None;
+        }
+
+        private void pnlDropZone_DragLeave(object sender, EventArgs e)
+        {
+            pnlDropZone.BackColor = Color.WhiteSmoke;
+        }
+
+        private void pnlDropZone_DragDrop(object sender, DragEventArgs e)
+        {
+            pnlDropZone.BackColor = Color.WhiteSmoke;
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files.Length > 0) SelectFile(files[0]);
+        }
+
+        private void pnlDropZone_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Belge Seçin";
+                if (ofd.ShowDialog() == DialogResult.OK) SelectFile(ofd.FileName);
+            }
+        }
+
+        private void SelectFile(string path)
+        {
+            selectedFilePath = path;
+            lblSelectedFile.Text = Path.GetFileName(path);
+            lblSelectedFile.ForeColor = Color.Green;
+            if (string.IsNullOrWhiteSpace(txtDocName.Text)) txtDocName.Text = Path.GetFileNameWithoutExtension(path);
+            hasUnsavedChanges = true;
+        }
+
+        // Boş eventler (Hata vermemesi için kalsın)
+        private void panel1_Paint(object sender, PaintEventArgs e) { }
+        private void lblSelectedFile_Click(object sender, EventArgs e) { }
+        private void label1_Click(object sender, EventArgs e) { }
+    }
+}
