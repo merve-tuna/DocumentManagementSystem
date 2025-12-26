@@ -49,6 +49,7 @@
             Controls.Add(button1);
             Name = "FrmOnayBekleyenler";
             Text = "FrmOnayBekleyenler";
+            Load += FrmOnayBekleyenler_Load;
             ResumeLayout(false);
         }
 

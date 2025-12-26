@@ -42,13 +42,12 @@ namespace DocumentManagementSystem
             // Event Bağlantıları
             this.FormClosing += FrmBelgeEkle_FormClosing;
 
-            pnlDropZone.DragEnter += pnlDropZone_DragEnter;
-            pnlDropZone.DragLeave += pnlDropZone_DragLeave;
-            pnlDropZone.DragDrop += pnlDropZone_DragDrop;
-            pnlDropZone.Click += pnlDropZone_Click;
+            //pnlDropZone.DragEnter += pnlDropZone_DragEnter;
+            //pnlDropZone.DragLeave += pnlDropZone_DragLeave;
+            //pnlDropZone.DragDrop += pnlDropZone_DragDrop;
+           // pnlDropZone.Click += pnlDropZone_Click;
 
-            btnAction.Click += btnAction_Click;
-            btnClear.Click += btnClear_Click;
+            //btnClear.Click += btnClear_Click;
 
             // Değişiklik takibi
             if (txtDocName != null) txtDocName.TextChanged += (s, e) => hasUnsavedChanges = true;

@@ -21,5 +21,10 @@ namespace DocumentManagementSystem
         {
             this.Close(); // Bu sayfayı kapatır (Böylece ana sayfa otomatik açılır)
         }
+
+        private void FrmOnayBekleyenler_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
