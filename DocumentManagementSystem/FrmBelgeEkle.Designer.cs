@@ -35,7 +35,7 @@
             pictureBox1 = new PictureBox();
             lblSelectedFile = new Label();
             panel1 = new Panel();
-            button1 = new Button();
+            btnDraft = new Button();
             txtDescription = new RichTextBox();
             cmbDepartment = new ComboBox();
             btnClear = new Button();
@@ -114,7 +114,7 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(button1);
+            panel1.Controls.Add(btnDraft);
             panel1.Controls.Add(txtDescription);
             panel1.Controls.Add(cmbDepartment);
             panel1.Controls.Add(btnClear);
@@ -131,14 +131,14 @@
             panel1.Size = new Size(426, 450);
             panel1.TabIndex = 3;
             // 
-            // button1
+            // btnDraft
             // 
-            button1.Location = new Point(67, 408);
-            button1.Name = "button1";
-            button1.Size = new Size(120, 30);
-            button1.TabIndex = 14;
-            button1.Text = "Taslağa Kaydet";
-            button1.UseVisualStyleBackColor = true;
+            btnDraft.Location = new Point(67, 408);
+            btnDraft.Name = "btnDraft";
+            btnDraft.Size = new Size(120, 30);
+            btnDraft.TabIndex = 14;
+            btnDraft.Text = "Taslağa Kaydet";
+            btnDraft.UseVisualStyleBackColor = true;
             // 
             // txtDescription
             // 
@@ -150,6 +150,7 @@
             // 
             // cmbDepartment
             // 
+            cmbDepartment.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbDepartment.FormattingEnabled = true;
             cmbDepartment.Location = new Point(6, 133);
             cmbDepartment.Name = "cmbDepartment";
@@ -164,9 +165,11 @@
             btnClear.TabIndex = 4;
             btnClear.Text = "Temizle";
             btnClear.UseVisualStyleBackColor = true;
+            btnClear.Click += btnClear_Click;
             // 
             // cmbCategory
             // 
+            cmbCategory.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbCategory.FormattingEnabled = true;
             cmbCategory.Location = new Point(6, 187);
             cmbCategory.Name = "cmbCategory";
@@ -297,7 +300,7 @@
         private RichTextBox txtDescription;
         private ComboBox cmbDepartment;
         private ComboBox cmbCategory;
-        private Button button1;
+        private Button btnDraft;
         private Label label6;
     }
 }

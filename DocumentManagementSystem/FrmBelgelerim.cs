@@ -12,6 +12,16 @@ using System.Windows.Forms;
 
 namespace DocumentManagementSystem
 {
+    public enum DocumentStatus
+    {
+        Taslak = 1,
+        EditörOnayıBekleniyor = 2,
+        AdminOnayıBekleniyor = 3,
+        Yayında = 4,
+        Reddedildi = 5,
+        İmhaEdildi = 6
+
+    }
     public partial class FrmBelgelerim : Form
     {
         public FrmBelgelerim()

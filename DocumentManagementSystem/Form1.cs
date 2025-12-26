@@ -26,27 +26,37 @@ namespace DocumentManagementSystem
             LoadCategoriesForFilter();
             LoadInitialData();
             RefreshDocumentList();
+            UpdateLabels();
+            ConfigureDataGridView();
 
         }
 
+        private void UpdateLabels()
+        {
+            // 1. Kayýt Sayýsý (Toplam Listelenen)
+            if (binder != null)
+            {
+                lblRecordCount.Text = $"Toplam {binder.Count} belge listelendi";
+            }
+
+        }
 
         private void RefreshDocumentList()
         {
             try
             {
-                // SqlHelper sayesinde connectionString ile uðraþmana gerek kalmaz
-                // Sadece prosedür ismini vermen yeterlidir
-                DataTable dt = SqlHelper.GetDataByProcedure("sp_GetDocuments");
+                DataTable dt = SqlHelper.GetDataByProcedure("storedprocedure_FilterDocuments");
 
-                // dgvDocuments senin DataGridView nesnenin ismidir
                 if (dt != null)
                 {
-                    dgvDocuments.DataSource = dt;
+
+                    binder.DataSource = dt;       // 1. Veriyi binder'a yükle
+                    dgvDocuments.DataSource = binder; // 2. Grid'i binder'a baðla
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Listeleme sýrasýnda bir hata oluþtu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Hata: " + ex.Message);
             }
         }
 
@@ -215,7 +225,7 @@ namespace DocumentManagementSystem
                 this.Show();
 
                 // Þimdi hafýzadaki deðerleri uyguluyoruz
-                this.WindowState = finalState;
+                //this.WindowState = finalState;
 
                 // Eðer normal moda döndüysek boyut ve konumu ayarla
                 if (this.WindowState == FormWindowState.Normal)
@@ -237,26 +247,31 @@ namespace DocumentManagementSystem
         // 1. Önce arama iþlemini yapan ORTAK bir metot yazalým
         private void DoSearch()
         {
-            // Arama kutusundaki metni al, boþluklarý temizle
             string arananKelime = txtSearch.Text.Trim().Replace("'", "''");
 
             if (string.IsNullOrEmpty(arananKelime))
             {
-                // Kutu boþsa filtreyi kaldýr
                 binder.RemoveFilter();
             }
             else
             {
-                // BURAYA DÝKKAT: Veritabanýndaki sütun adýnýz 'DosyaAdi' deðilse deðiþtirin!
-                binder.Filter = string.Format("DosyaAdi LIKE '%{0}%'", arananKelime);
+
+                try
+                {
+                    binder.Filter = string.Format("DocumentName LIKE '%{0}%'", arananKelime);
+                }
+                catch (Exception ex)
+                {
+                    // Eðer hala hata alýyorsan sütun adý yanlýþtýr.
+                    MessageBox.Show("Filtreleme hatasý. Sütun adýný kontrol et: " + ex.Message);
+                }
+
                 if (binder.Count == 0)
                 {
                     MessageBox.Show("Aradýðýnýz kriterlere uygun belge bulunamadý.", "Sonuç Yok", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // Ýsterseniz filtreyi geri kaldýrabilirsiniz ki tablo boþ kalmasýn:
-                    // binder.RemoveFilter(); 
-                    // txtSearch.SelectAll(); // Kullanýcý kolayca yeni kelime yazabilsin diye metni seç
+                    // Ýstersen burada aramayý temizleme kodunu aktif edebilirsin
                 }
+                UpdateLabels();
             }
         }
 
@@ -288,40 +303,41 @@ namespace DocumentManagementSystem
         {
             try
             {
-                // Tarihleri sýfýrla (son 30 gün)
-                dtpStartDate.Value = DateTime.Now.AddDays(-30);
+                // 1. ADIM: Arama Kutusunu ve Bellek Filtresini Temizle
+                txtSearch.Text = "";       // Görsel olarak kutuyu boþalt
+                binder.RemoveFilter();     // Arka plandaki "LIKE" filtresini kaldýr
+
+                // 2. ADIM: Görsel Seçimleri Sýfýrla
+                if (cmbDepartment.Items.Count > 0) cmbDepartment.SelectedIndex = 0; // "Tümü" yap
+                if (cmbCategory != null && cmbCategory.Items.Count > 0) cmbCategory.SelectedIndex = 0;
+
+                // Tarihleri görsel olarak mantýklý bir aralýða çek (Örn: Bu yýlýn baþý veya bugün)
+                // Not: Bu sadece görseldir, sorguyu etkilememesi için aþaðýda NULL göndereceðiz.
+                dtpStartDate.Value = DateTime.Now.AddYears(-1);
                 dtpEndDate.Value = DateTime.Now;
 
-                // Departman ve kategori seçimlerini sýfýrla
-                if (cmbDepartment.Items.Count > 0)
-                    cmbDepartment.SelectedIndex = 0;
-
-                if (cmbCategory != null && cmbCategory.Items.Count > 0)
-                    cmbCategory.SelectedIndex = 0;
-
-                // Tüm verileri getir (son 30 gün)
-                DateTime startDate = DateTime.Now.AddDays(-30);
-                DateTime endDate = DateTime.Now;
-
+                // 3. ADIM: SQL'den "TÜM" Verileri Çek (Sýnýrlama Olmadan)
+                // SP'de NULL gönderdiðimizde "OR @Param IS NULL" çalýþtýðý için tüm veriler gelir.
                 SqlParameter[] parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@StartDate", startDate.ToString("yyyy-MM-dd")),
-                    new SqlParameter("@EndDate", endDate.ToString("yyyy-MM-dd")),
-                    new SqlParameter("@DepartmentName", DBNull.Value)
+            new SqlParameter("@StartDate", DBNull.Value),      // Tarih sýnýrý yok
+            new SqlParameter("@EndDate", DBNull.Value),        // Bitiþ sýnýrý yok
+            new SqlParameter("@DepartmentName", DBNull.Value)  // Departman sýnýrý yok
                 };
 
                 DataTable dt = SqlHelper.GetDataByProcedure("storedprocedure_FilterDocuments", parameters);
 
+                // 4. ADIM: Veriyi Binder ile Baðla (Kritik Nokta)
                 if (dgvDocuments != null)
                 {
-                    dgvDocuments.DataSource = dt;
-                    lblRecordCount.Text = $"Toplam {dt.Rows.Count} belge bulundu";
+                    binder.DataSource = dt;           // Veriyi önce binder'a yükle
+                    dgvDocuments.DataSource = binder; // Sonra grid'e binder'ý ver
+
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Temizleme sýrasýnda hata: {ex.Message}",
-                    "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Temizleme iþlemi sýrasýnda hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -381,32 +397,34 @@ namespace DocumentManagementSystem
         {
             try
             {
-                // Baþlangýçta tüm belgeleri yükle (sadece son 30 gün)
-                DateTime startDate = DateTime.Now.AddDays(-30);
-                DateTime endDate = DateTime.Now;
+
+                // 1. Önceki filtre kalýntýlarýný temizle
+                if (binder != null) binder.RemoveFilter();
+
+                // 2. Arama kutusunu görsel olarak temizle (Ýsteðe baðlý)
+                if (txtSearch != null) txtSearch.Text = "";
+
 
                 SqlParameter[] parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@StartDate", startDate.ToString("yyyy-MM-dd")),
-                    new SqlParameter("@EndDate", endDate.ToString("yyyy-MM-dd")),
+                    new SqlParameter("@StartDate", DBNull.Value),
+                    new SqlParameter("@EndDate", DBNull.Value),
                     new SqlParameter("@DepartmentName", DBNull.Value)
                 };
 
                 DataTable dt = SqlHelper.GetDataByProcedure("storedprocedure_FilterDocuments", parameters);
 
+                //MessageBox.Show($"LoadInitialData Çalýþtý!\nGelen Satýr Sayýsý: {dt.Rows.Count}");
+
                 // DataGridView'e baðla
                 if (dgvDocuments != null)
                 {
-                    dgvDocuments.DataSource = dt;
+                    binder.DataSource = dt;       // 1. Veriyi binder'a yükle
+                    dgvDocuments.DataSource = binder; // 2. Grid'i binder'a baðla
                     ConfigureDataGridView();
+                    UpdateLabels();
                 }
 
-                // Tarih kontrollerini ayarla
-                if (dtpStartDate != null && dtpEndDate != null)
-                {
-                    dtpStartDate.Value = startDate;
-                    dtpEndDate.Value = endDate;
-                }
             }
             catch (Exception ex)
             {
@@ -422,7 +440,8 @@ namespace DocumentManagementSystem
                 {
                     // Kolon baþlýklarýný Türkçeleþtir
                     if (dgvDocuments.Columns.Contains("DocumentID"))
-                        dgvDocuments.Columns["DocumentID"].HeaderText = "Belge ID";
+                        //dgvDocuments.Columns["DocumentID"].HeaderText = "Belge ID";
+                        dgvDocuments.Columns["DocumentID"].Visible = false;
 
                     if (dgvDocuments.Columns.Contains("DocumentName"))
                         dgvDocuments.Columns["DocumentName"].HeaderText = "Belge Adý";
@@ -434,10 +453,12 @@ namespace DocumentManagementSystem
                         dgvDocuments.Columns["CategoryName"].HeaderText = "Kategori";
 
                     if (dgvDocuments.Columns.Contains("StatusName"))
-                        dgvDocuments.Columns["StatusName"].HeaderText = "Durum";
+                        dgvDocuments.Columns["StatusName"].HeaderText = "Durum"; 
 
                     if (dgvDocuments.Columns.Contains("Description"))
                         dgvDocuments.Columns["Description"].HeaderText = "Açýklama";
+                        dgvDocuments.Columns["Description"].Visible = false;
+
 
                     if (dgvDocuments.Columns.Contains("FileType"))
                         dgvDocuments.Columns["FileType"].HeaderText = "Dosya Türü";
@@ -502,11 +523,13 @@ namespace DocumentManagementSystem
 
                 if (dgvDocuments != null)
                 {
-                    dgvDocuments.DataSource = dt;
+                    binder.DataSource = dt;       // 1. Veriyi binder'a yükle
+                    dgvDocuments.DataSource = binder; // 2. Grid'i binder'a baðla
 
                     // Filtrelenen kayýt sayýsýný göster
                     int rowCount = dt.Rows.Count;
                     lblRecordCount.Text = $"Toplam {rowCount} belge bulundu";
+                    lblRecordCount.Visible = true;
 
                     if (rowCount == 0)
                     {
@@ -556,8 +579,9 @@ namespace DocumentManagementSystem
             // Seçili satýr sayýsýný göster
             if (dgvDocuments != null)
             {
-                int selectedCount = dgvDocuments.SelectedRows.Count;
-                lblSelectionCount.Text = $"{selectedCount} belge seçildi";
+                //int selectedCount = dgvDocuments.SelectedRows.Count;
+
+                UpdateLabels();
             }
         }
 
@@ -600,54 +624,6 @@ namespace DocumentManagementSystem
             }
         }
 
-        // --- 3. ADIM: SENÝN YAZDIÐIN KOD (Buraya Entegre Edildi) ---
-        //private void ApplyRolePermissions(UserRole role)
-        //{
-        //    // Önce hepsini varsayýlan hale getir (veya gizle/kapat)
-        //    btnDocumentAdd.Enabled = true;
-        //    btnMyDocuments.Enabled = true;
-        //    btnPendingApproval.Enabled = true;
-        //    btnTrash.Enabled = true;
-        //    btnHelp.Enabled = true;
-
-        //    // Butonlarýn görünürlüðünü de açalým (önceden gizlendiyse geri gelsin)
-        //    btnDocumentAdd.Visible = true;
-        //    btnMyDocuments.Visible = true;
-        //    btnPendingApproval.Visible = true;
-        //    btnTrash.Visible = true;
-        //    btnHelp.Visible = true;
-
-        //    // Renkleri sýfýrla
-        //    ResetButtonStyles();
-
-        //    // Filtreleme kontrollerini de role göre ayarla
-        //    ApplyRoleToFilterControls(role);
-
-        //    switch (role)
-        //    {
-        //        case UserRole.Admin:
-        //        case UserRole.Editor:
-        //            // Admin ve Editörde hepsi aktif
-        //            break;
-
-        //        case UserRole.Employee:
-        //            // Çalýþan: Onay Bekleyenler pasif/gizli
-        //            btnPendingApproval.Enabled = false;
-        //            break;
-
-        //        case UserRole.Reader:
-        //            // Okuyucu: Sadece Yardým aktif
-        //            btnDocumentAdd.Enabled = false;
-        //            btnMyDocuments.Enabled = false;
-        //            btnPendingApproval.Enabled = false;
-        //            btnTrash.Enabled = false;
-
-        //            // Yardým açýk kalýr:
-        //            btnHelp.Enabled = true;
-        //            break;
-        //    }
-        //}
-
 
         private void ApplyRoleToFilterControls(UserRole role)
         {
@@ -673,7 +649,9 @@ namespace DocumentManagementSystem
             if (btnClear != null) btnClear.Enabled = canFilter;
         }
 
-        private void lblSelectionCount_Click(object sender, EventArgs e)
+
+
+        private void lblRecordCount_Click(object sender, EventArgs e)
         {
 
         }

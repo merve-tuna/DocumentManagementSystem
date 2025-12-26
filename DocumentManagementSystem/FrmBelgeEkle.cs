@@ -24,13 +24,11 @@ namespace DocumentManagementSystem
         private string selectedFilePath = "";
         private bool hasUnsavedChanges = false;
 
-        // --- YAPICI METOD (Program ilk açıldığında burası çalışır) ---
         public FrmBelgeEkle()
         {
             InitializeComponent();
             SetupUI();
-
-            // DİKKAT: Artık eski metodları değil, bunu çağırıyoruz
+            this.FormClosing += new FormClosingEventHandler(FrmBelgeEkle_FormClosing);
             LoadComboBoxes();
         }
 
@@ -39,19 +37,15 @@ namespace DocumentManagementSystem
         {
             pnlDropZone.AllowDrop = true;
 
-            // Event Bağlantıları
-            this.FormClosing += FrmBelgeEkle_FormClosing;
-
-            //pnlDropZone.DragEnter += pnlDropZone_DragEnter;
-            //pnlDropZone.DragLeave += pnlDropZone_DragLeave;
-            //pnlDropZone.DragDrop += pnlDropZone_DragDrop;
-           // pnlDropZone.Click += pnlDropZone_Click;
-
-            //btnClear.Click += btnClear_Click;
+            btnClear.Enabled = false; // Temizle butonu başta kapalı
+            btnAction.Enabled = true; // Kaydet/Gönder butonu açık
 
             // Değişiklik takibi
             if (txtDocName != null) txtDocName.TextChanged += (s, e) => hasUnsavedChanges = true;
             if (cmbDepartment != null) cmbDepartment.SelectedIndexChanged += (s, e) => hasUnsavedChanges = true;
+            if (cmbDepartment != null) cmbDepartment.SelectedIndexChanged += (s, e) => hasUnsavedChanges = true;
+
+            lblSelectedFile.Visible = false;
         }
 
         // --- COMBOBOX DOLDURMA (EN ÖNEMLİ KISIM) ---
@@ -99,7 +93,7 @@ namespace DocumentManagementSystem
             if (string.IsNullOrWhiteSpace(txtDocName.Text) || cmbDepartment.SelectedIndex == -1 ||
                 cmbCategory.SelectedIndex == -1 || string.IsNullOrEmpty(selectedFilePath))
             {
-                MessageBox.Show("Lütfen tüm alanları doldurunuz.", "Uyarı");
+                MessageBox.Show("Lütfen tüm zorunlu alanları doldurunuz.", "Uyarı");
                 return;
             }
 
@@ -119,10 +113,19 @@ namespace DocumentManagementSystem
                 // 3. SqlHelper üzerinden prosedürü çağır
                 int sonuc = SqlHelper.ExecuteProcedure("sp_InsertDocument", p);
 
-                if (sonuc > 0)
+                if (sonuc != 0)
                 {
-                    MessageBox.Show("Belge başarıyla veritabanına kaydedildi!", "Başarılı");
-                    this.Close();
+                    // 1. Önce kullanıcıya mesaj ver
+                    MessageBox.Show("Belge başarıyla veritabanına kaydedildi!", "İşlem Başarılı");
+
+                    // 2. Değişiklik takibini kapat (Artık kaydedildi, uyarı vermesin)
+                    hasUnsavedChanges = false;
+
+                    // 3. BUTONLARI AYARLA
+                    btnAction.Enabled = false; // Kaydet butonunu İNAKTİF yap (tekrar basamasın)
+                    btnClear.Enabled = true;   // Temizle butonunu AKTİF yap (yeni kayıt için bassın)
+
+                    // 4. Formu KAPATMA (this.Close()'u sildik)
                 }
             }
             catch (Exception ex)
@@ -206,14 +209,17 @@ namespace DocumentManagementSystem
         {
             selectedFilePath = path;
             lblSelectedFile.Text = Path.GetFileName(path);
-            lblSelectedFile.ForeColor = Color.Green;
+            lblSelectedFile.ForeColor = Color.Blue;
             if (string.IsNullOrWhiteSpace(txtDocName.Text)) txtDocName.Text = Path.GetFileNameWithoutExtension(path);
             hasUnsavedChanges = true;
+            lblSelectedFile.Visible = true;
         }
 
         // Boş eventler (Hata vermemesi için kalsın)
         private void panel1_Paint(object sender, PaintEventArgs e) { }
         private void lblSelectedFile_Click(object sender, EventArgs e) { }
         private void label1_Click(object sender, EventArgs e) { }
+
+       
     }
 }
