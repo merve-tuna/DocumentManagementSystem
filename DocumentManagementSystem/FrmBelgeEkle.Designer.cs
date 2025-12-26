@@ -57,9 +57,10 @@
             // 
             // btnBack
             // 
-            btnBack.Location = new Point(6, 12);
+            btnBack.Location = new Point(8, 15);
+            btnBack.Margin = new Padding(4, 4, 4, 4);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(95, 30);
+            btnBack.Size = new Size(119, 38);
             btnBack.TabIndex = 0;
             btnBack.Text = "Geri";
             btnBack.UseVisualStyleBackColor = true;
@@ -71,9 +72,10 @@
             pnlDropZone.BorderStyle = BorderStyle.FixedSingle;
             pnlDropZone.Controls.Add(label6);
             pnlDropZone.Controls.Add(pictureBox1);
-            pnlDropZone.Location = new Point(3, 80);
+            pnlDropZone.Location = new Point(4, 100);
+            pnlDropZone.Margin = new Padding(4, 4, 4, 4);
             pnlDropZone.Name = "pnlDropZone";
-            pnlDropZone.Size = new Size(335, 255);
+            pnlDropZone.Size = new Size(418, 318);
             pnlDropZone.TabIndex = 1;
             pnlDropZone.Click += pnlDropZone_Click;
             pnlDropZone.Paint += panel1_Paint;
@@ -81,9 +83,10 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(74, 153);
+            label6.Location = new Point(92, 191);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(182, 60);
+            label6.Size = new Size(217, 75);
             label6.TabIndex = 1;
             label6.Text = "Belgeyi Buraya Sürükleyin \r\nveya \r\nTıklayıp Seçin";
             label6.TextAlign = ContentAlignment.TopCenter;
@@ -93,9 +96,10 @@
             // 
             pictureBox1.ErrorImage = (Image)resources.GetObject("pictureBox1.ErrorImage");
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(100, 85);
+            pictureBox1.Location = new Point(125, 106);
+            pictureBox1.Margin = new Padding(4, 4, 4, 4);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(130, 65);
+            pictureBox1.Size = new Size(162, 81);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -105,9 +109,10 @@
             // 
             lblSelectedFile.AutoSize = true;
             lblSelectedFile.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            lblSelectedFile.Location = new Point(3, 338);
+            lblSelectedFile.Location = new Point(4, 422);
+            lblSelectedFile.Margin = new Padding(4, 0, 4, 0);
             lblSelectedFile.Name = "lblSelectedFile";
-            lblSelectedFile.Size = new Size(48, 20);
+            lblSelectedFile.Size = new Size(59, 25);
             lblSelectedFile.TabIndex = 2;
             lblSelectedFile.Text = "label1";
             lblSelectedFile.Click += lblSelectedFile_Click;
@@ -126,25 +131,29 @@
             panel1.Controls.Add(txtDocName);
             panel1.Controls.Add(btnAction);
             panel1.Dock = DockStyle.Right;
-            panel1.Location = new Point(374, 0);
+            panel1.Location = new Point(468, 0);
+            panel1.Margin = new Padding(4, 4, 4, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(426, 450);
+            panel1.Size = new Size(532, 562);
             panel1.TabIndex = 3;
             // 
             // btnDraft
             // 
-            btnDraft.Location = new Point(67, 408);
+            btnDraft.Location = new Point(84, 510);
+            btnDraft.Margin = new Padding(4, 4, 4, 4);
             btnDraft.Name = "btnDraft";
-            btnDraft.Size = new Size(120, 30);
+            btnDraft.Size = new Size(150, 38);
             btnDraft.TabIndex = 14;
             btnDraft.Text = "Taslağa Kaydet";
             btnDraft.UseVisualStyleBackColor = true;
+            btnDraft.Click += btnDraft_Click;
             // 
             // txtDescription
             // 
-            txtDescription.Location = new Point(6, 241);
+            txtDescription.Location = new Point(8, 301);
+            txtDescription.Margin = new Padding(4, 4, 4, 4);
             txtDescription.Name = "txtDescription";
-            txtDescription.Size = new Size(383, 94);
+            txtDescription.Size = new Size(478, 116);
             txtDescription.TabIndex = 13;
             txtDescription.Text = "";
             // 
@@ -152,16 +161,18 @@
             // 
             cmbDepartment.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbDepartment.FormattingEnabled = true;
-            cmbDepartment.Location = new Point(6, 133);
+            cmbDepartment.Location = new Point(8, 166);
+            cmbDepartment.Margin = new Padding(4, 4, 4, 4);
             cmbDepartment.Name = "cmbDepartment";
-            cmbDepartment.Size = new Size(383, 28);
+            cmbDepartment.Size = new Size(478, 33);
             cmbDepartment.TabIndex = 12;
             // 
             // btnClear
             // 
-            btnClear.Location = new Point(193, 408);
+            btnClear.Location = new Point(241, 510);
+            btnClear.Margin = new Padding(4, 4, 4, 4);
             btnClear.Name = "btnClear";
-            btnClear.Size = new Size(95, 30);
+            btnClear.Size = new Size(119, 38);
             btnClear.TabIndex = 4;
             btnClear.Text = "Temizle";
             btnClear.UseVisualStyleBackColor = true;
@@ -171,60 +182,67 @@
             // 
             cmbCategory.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbCategory.FormattingEnabled = true;
-            cmbCategory.Location = new Point(6, 187);
+            cmbCategory.Location = new Point(8, 234);
+            cmbCategory.Margin = new Padding(4, 4, 4, 4);
             cmbCategory.Name = "cmbCategory";
-            cmbCategory.Size = new Size(383, 28);
+            cmbCategory.Size = new Size(478, 33);
             cmbCategory.TabIndex = 11;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(6, 218);
+            label4.Location = new Point(8, 272);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(70, 20);
+            label4.Size = new Size(83, 25);
             label4.TabIndex = 10;
             label4.Text = "Açıklama";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(6, 164);
+            label3.Location = new Point(8, 205);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(76, 20);
+            label3.Size = new Size(91, 25);
             label3.TabIndex = 9;
             label3.Text = "Kategori *";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(3, 110);
+            label2.Location = new Point(4, 138);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(94, 20);
+            label2.Size = new Size(114, 25);
             label2.TabIndex = 8;
             label2.Text = "Departman *";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(6, 57);
+            label1.Location = new Point(8, 71);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(84, 20);
+            label1.Size = new Size(100, 25);
             label1.TabIndex = 7;
             label1.Text = "Belge Adı *";
             label1.Click += label1_Click;
             // 
             // txtDocName
             // 
-            txtDocName.Location = new Point(3, 80);
+            txtDocName.Location = new Point(4, 100);
+            txtDocName.Margin = new Padding(4, 4, 4, 4);
             txtDocName.Name = "txtDocName";
-            txtDocName.Size = new Size(386, 27);
+            txtDocName.Size = new Size(482, 31);
             txtDocName.TabIndex = 6;
             // 
             // btnAction
             // 
-            btnAction.Location = new Point(294, 408);
+            btnAction.Location = new Point(368, 510);
+            btnAction.Margin = new Padding(4, 4, 4, 4);
             btnAction.Name = "btnAction";
-            btnAction.Size = new Size(95, 30);
+            btnAction.Size = new Size(119, 38);
             btnAction.TabIndex = 5;
             btnAction.Text = "btnSave";
             btnAction.UseVisualStyleBackColor = true;
@@ -234,8 +252,9 @@
             // 
             panel2.Dock = DockStyle.Left;
             panel2.Location = new Point(0, 0);
+            panel2.Margin = new Padding(4, 4, 4, 4);
             panel2.Name = "panel2";
-            panel2.Size = new Size(30, 450);
+            panel2.Size = new Size(38, 562);
             panel2.TabIndex = 4;
             // 
             // panel3
@@ -245,29 +264,32 @@
             panel3.Controls.Add(pnlDropZone);
             panel3.Controls.Add(lblSelectedFile);
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(30, 0);
+            panel3.Location = new Point(38, 0);
+            panel3.Margin = new Padding(4, 4, 4, 4);
             panel3.Name = "panel3";
-            panel3.Size = new Size(344, 450);
+            panel3.Size = new Size(430, 562);
             panel3.TabIndex = 5;
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            label5.Location = new Point(3, 52);
+            label5.Location = new Point(4, 65);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(97, 25);
+            label5.Size = new Size(116, 30);
             label5.TabIndex = 3;
             label5.Text = "Belge Ekle";
             // 
             // FrmBelgeEkle
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1000, 562);
             Controls.Add(panel3);
             Controls.Add(panel2);
             Controls.Add(panel1);
+            Margin = new Padding(4, 4, 4, 4);
             Name = "FrmBelgeEkle";
             Text = "FrmBelgeEkle";
             pnlDropZone.ResumeLayout(false);

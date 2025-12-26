@@ -49,9 +49,11 @@ namespace DocumentManagementSystem
 
                 if (dt != null)
                 {
+                    binder.DataSource = dt;
+                    dgvDocuments.DataSource = binder;
 
-                    binder.DataSource = dt;       // 1. Veriyi binder'a yükle
-                    dgvDocuments.DataSource = binder; // 2. Grid'i binder'a baðla
+                    // ANA SAYFA ÝÇÝN AYAR METODUNU ÇAÐIR:
+                    ConfigureDataGridView();
                 }
             }
             catch (Exception ex)
@@ -62,14 +64,14 @@ namespace DocumentManagementSystem
 
         private void SetupUI()
         {
-            // Kullanýcý Rolleri (Ekranda Görünen Ýsimler)
             cmbUserRole.Items.Clear();
-            cmbUserRole.Items.Add("Admin");
-            cmbUserRole.Items.Add("Editör");
-            cmbUserRole.Items.Add("Çalýþan");
-            cmbUserRole.Items.Add("Okuyucu");
-            cmbUserRole.SelectedIndex = 0; // Varsayýlan Admin
+            cmbUserRole.Items.Add("Admin");   // ID: 1
+            cmbUserRole.Items.Add("Editör");  // ID: 2
+            cmbUserRole.Items.Add("Üretici"); // ID: 3 (Eski hali: Çalýþan)
+            cmbUserRole.Items.Add("Okuyucu"); // ID: 4
+            cmbUserRole.SelectedIndex = 0;
 
+            cmbUserRole.SelectedIndexChanged += CmbUserRole_SelectedIndexChanged;
 
             // Olaylar
             cmbUserRole.SelectedIndexChanged += CmbUserRole_SelectedIndexChanged;
@@ -85,24 +87,42 @@ namespace DocumentManagementSystem
         // --- 2. ADIM: ComboBox Seçimini Enum'a Çevirme ---
         private void CmbUserRole_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // ComboBox boþsa iþlem yapma
             if (cmbUserRole.SelectedItem == null) return;
 
             string selectedText = cmbUserRole.SelectedItem.ToString();
             UserRole role;
 
-            // Türkçe Seçimi -> Kodun anlayacaðý Role Çeviriyoruz
+            // 1. ADIM: UserSession Bilgilerini Güncelle (Dinamik ID'ler)
             switch (selectedText)
             {
-                case "Admin": role = UserRole.Admin; break;
-                case "Editör": role = UserRole.Editor; break;
-                case "Çalýþan": role = UserRole.Employee; break;
-                case "Okuyucu": role = UserRole.Reader; break;
-                default: role = UserRole.Reader; break;
+                case "Admin":
+                    role = UserRole.Admin;
+                    UserSession.UserId = 1;
+                    break;
+                case "Editör":
+                    role = UserRole.Editor;
+                    UserSession.UserId = 2;
+                    break;
+                case "Üretici":
+                    role = UserRole.Employee;
+                    UserSession.UserId = 3;
+                    break;
+                case "Okuyucu":
+                    role = UserRole.Reader;
+                    UserSession.UserId = 4;
+                    break;
+                default:
+                    role = UserRole.Reader;
+                    UserSession.UserId = 4;
+                    break;
             }
 
-            // Senin yazdýðýn fonksiyonu çaðýrýyoruz
+            UserSession.RoleName = selectedText;
+
+            // 2. ADIM: Yetkileri ve Görsel Kýsýtlamalarý Uygula
             ApplyRolePermissions(role);
+            ApplyRoleToFilterControls(role); // Filtreleri kilitlemek/açmak için
+            ApplyRoleToDataGridView(role);   // Grid'i kilitlemek/açmak için
         }
 
         // --- 3. ADIM: SENÝN YAZDIÐIN KOD (Buraya Entegre Edildi) ---
@@ -150,6 +170,8 @@ namespace DocumentManagementSystem
                     btnHelp.Enabled = true;
                     break;
             }
+
+            this.Text = $"DMS - Aktif Kullanýcý ID: {UserSession.UserId} ({UserSession.RoleName})";
         }
 
         // Görseli düzeltmek için yardýmcý metod
@@ -440,20 +462,24 @@ namespace DocumentManagementSystem
                 {
                     // Kolon baþlýklarýný Türkçeleþtir
                     if (dgvDocuments.Columns.Contains("DocumentID"))
-                        //dgvDocuments.Columns["DocumentID"].HeaderText = "Belge ID";
+                        //dgvDocuments.Columns["DocumentID"].HeaderText = "Belge ID
                         dgvDocuments.Columns["DocumentID"].Visible = false;
 
                     if (dgvDocuments.Columns.Contains("DocumentName"))
                         dgvDocuments.Columns["DocumentName"].HeaderText = "Belge Adý";
 
+
                     if (dgvDocuments.Columns.Contains("DepartmentName"))
                         dgvDocuments.Columns["DepartmentName"].HeaderText = "Departman";
+
 
                     if (dgvDocuments.Columns.Contains("CategoryName"))
                         dgvDocuments.Columns["CategoryName"].HeaderText = "Kategori";
 
+
                     if (dgvDocuments.Columns.Contains("StatusName"))
-                        dgvDocuments.Columns["StatusName"].HeaderText = "Durum"; 
+                        dgvDocuments.Columns["StatusName"].HeaderText = "Durum";
+
 
                     if (dgvDocuments.Columns.Contains("Description"))
                         dgvDocuments.Columns["Description"].HeaderText = "Açýklama";
@@ -463,11 +489,14 @@ namespace DocumentManagementSystem
                     if (dgvDocuments.Columns.Contains("FileType"))
                         dgvDocuments.Columns["FileType"].HeaderText = "Dosya Türü";
 
+
                     if (dgvDocuments.Columns.Contains("FileSize"))
                         dgvDocuments.Columns["FileSize"].HeaderText = "Dosya Boyutu";
 
+
                     if (dgvDocuments.Columns.Contains("CurrentVersion"))
                         dgvDocuments.Columns["CurrentVersion"].HeaderText = "Versiyon";
+
 
                     if (dgvDocuments.Columns.Contains("UploadDate"))
                     {
@@ -485,12 +514,15 @@ namespace DocumentManagementSystem
                     if (dgvDocuments.Columns.Contains("Description"))
                         dgvDocuments.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 }
+
                 catch (Exception ex)
                 {
                     MessageBox.Show($"DataGridView ayarlanýrken hata: {ex.Message}",
                         "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+
             }
+
         }
 
         private void btnFilter_Click(object sender, EventArgs e)

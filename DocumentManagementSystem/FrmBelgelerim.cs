@@ -1,13 +1,14 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace DocumentManagementSystem
@@ -27,53 +28,92 @@ namespace DocumentManagementSystem
         public FrmBelgelerim()
         {
             InitializeComponent();
-            SetupGrid();
-            LoadDummyData();
+            // SetupGrid(); // Eğer grid ayarların (ReadOnly vb.) lazımsa kalsın
+            LoadRealData(); // DummyData yerine artık bu çalışacak
         }
 
         //
 
-        private void SetupGrid()
-        {
-            // Grid kolonlarını manuel oluşturuyoruz
-            dgvMyDocs.ColumnCount = 4;
-            dgvMyDocs.Columns[0].Name = "ID";
-            dgvMyDocs.Columns[0].Visible = false; // ID gizli olsun
-            dgvMyDocs.Columns[1].Name = "Belge Adı";
-            dgvMyDocs.Columns[2].Name = "Tarih";
-            dgvMyDocs.Columns[3].Name = "Durum"; // Taslak, Onaylandı vs.
-
-            dgvMyDocs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvMyDocs.ReadOnly = true;
-            dgvMyDocs.AllowUserToAddRows = false;
-        }
-
-        private void LoadDummyData()
-        {
-            // Grid'e sahte veriler ekliyoruz
-            dgvMyDocs.Rows.Add("1", "Proje Gereksinimleri.docx", "20.12.2025", "Taslak");
-            dgvMyDocs.Rows.Add("2", "Yıllık Bütçe Raporu.xlsx", "18.12.2025", "Onaylandı");
-            dgvMyDocs.Rows.Add("3", "Eski Logo Tasarımı.png", "10.11.2025", "Silindi");
-            dgvMyDocs.Rows.Add("4", "Müşteri Teklifi v1.pdf", "15.12.2025", "Red");
-            dgvMyDocs.Rows.Add("5", "İK Yönetmeliği.pdf", "19.12.2025", "Onay Bekliyor");
-
-            // Renklendirme (Görsellik için)
-            ColorizeRows();
-        }
 
         private void ColorizeRows()
         {
             foreach (DataGridViewRow row in dgvMyDocs.Rows)
             {
-                string status = row.Cells["Durum"].Value.ToString();
+                // Artık StatusName ile kontrol ediyoruz
+                if (row.Cells["StatusName"].Value == null) continue;
 
-                // Duruma göre satır veya hücre rengini değiştirme
-                if (status == "Onaylandı") row.Cells["Durum"].Style.ForeColor = Color.Green;
-                else if (status == "Red") row.Cells["Durum"].Style.ForeColor = Color.Red;
-                else if (status == "Silindi") row.Cells["Durum"].Style.ForeColor = Color.Gray;
-                else if (status == "Taslak") row.Cells["Durum"].Style.ForeColor = Color.Blue;
+                string status = row.Cells["StatusName"].Value.ToString();
+
+                if (status == "Yayında")
+                    row.Cells["StatusName"].Style.ForeColor = Color.Green;
+                else if (status == "Reddedildi")
+                    row.Cells["StatusName"].Style.ForeColor = Color.Red;
+                else if (status == "Taslak")
+                    row.Cells["StatusName"].Style.ForeColor = Color.Blue;
+                else if (status == "Editör Onayı Bekleniyor" || status == "Admin Onayı Bekleniyor")
+                    row.Cells["StatusName"].Style.ForeColor = Color.Orange;
             }
         }
+
+        private void LoadRealData()
+        {
+            try
+            {
+                SqlParameter[] p = { new SqlParameter("@UserID", UserSession.UserId) };
+                DataTable dt = SqlHelper.GetDataByProcedure("sp_GetMyDocuments", p);
+
+                if (dt != null)
+                {
+                    dgvMyDocs.DataSource = dt; // Veriyi bağla
+
+                    // BURADA ÇAĞIRMALISIN:
+                    ConfigureMyDocsGrid();
+
+                    ColorizeRows(); // Renklendirmeyi de ardından yapabilirsin
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Hata: " + ex.Message);
+            }
+        }
+
+        private void SetHeader(DataGridView dgv, string dbColumnName, string headerText, bool isVisible)
+        {
+            if (dgv.Columns.Contains(dbColumnName))
+            {
+                dgv.Columns[dbColumnName].HeaderText = headerText;
+                dgv.Columns[dbColumnName].Visible = isVisible;
+            }
+        }
+
+        private void ConfigureMyDocsGrid()
+        {
+            if (dgvMyDocs == null || dgvMyDocs.Columns.Count == 0) return;
+
+            try
+            {
+                // Artık İngilizce isimlerle çalış
+                SetHeader(dgvMyDocs, "DocumentName", "Belge Adı", true);
+                SetHeader(dgvMyDocs, "StatusName", "Durum", true);
+
+                if (dgvMyDocs.Columns.Contains("UploadDate"))
+                {
+                    dgvMyDocs.Columns["UploadDate"].HeaderText = "Tarih";
+                    dgvMyDocs.Columns["UploadDate"].DefaultCellStyle.Format = "dd.MM.yyyy";
+                }
+
+                dgvMyDocs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Grid ayarlanırken hata: {ex.Message}");
+            }
+        }
+
+
+
+
 
         // Bir satır seçildiğinde çalışır
         //

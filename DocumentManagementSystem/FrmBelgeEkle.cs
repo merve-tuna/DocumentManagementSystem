@@ -220,6 +220,38 @@ namespace DocumentManagementSystem
         private void lblSelectedFile_Click(object sender, EventArgs e) { }
         private void label1_Click(object sender, EventArgs e) { }
 
-       
+        private void btnDraft_Click(object sender, EventArgs e)
+        {
+            // Validasyon: Belge adı zorunludur
+            if (string.IsNullOrWhiteSpace(txtDocName.Text))
+            {
+                MessageBox.Show("Taslak olarak kaydetmek için en azından Belge Adı girilmelidir.", "Uyarı");
+                return;
+            }
+
+            try
+            {
+                SqlParameter[] p = {
+                    new SqlParameter("@DocumentName", txtDocName.Text),
+                    new SqlParameter("@Description", txtDescription.Text),
+                    new SqlParameter("@CategoryID", cmbCategory.SelectedValue),
+                    new SqlParameter("@DepartmentID", cmbDepartment.SelectedValue),
+                    new SqlParameter("@UploadedByUserID", UserSession.UserId)
+                };
+
+                // Yeni prosedürümüzü çağırıyoruz
+                int result = SqlHelper.ExecuteProcedure("sp_SaveAsDraft", p);
+
+                if (result > 0)
+                {
+                    MessageBox.Show("Belge taslak olarak kaydedildi.", "Başarılı");
+                    this.Close(); // Kayıt sonrası formu kapat
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Kayıt hatası: " + ex.Message);
+            }
+        }
     }
 }
