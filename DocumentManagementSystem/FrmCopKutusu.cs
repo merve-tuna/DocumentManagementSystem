@@ -12,6 +12,7 @@ namespace DocumentManagementSystem
 {
     public partial class FrmCopKutusu : Form
     {
+        private string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=DocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
         public FrmCopKutusu()
         {
             InitializeComponent();
@@ -21,5 +22,8 @@ namespace DocumentManagementSystem
         {
             this.Close(); // Bu sayfayı kapatır (Böylece ana sayfa otomatik açılır)
         }
+
+
     }
+
 }

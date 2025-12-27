@@ -314,6 +314,7 @@
             dgvDocuments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDocuments.Size = new Size(600, 301);
             dgvDocuments.TabIndex = 2;
+            dgvDocuments.CellContentClick += dgvDocuments_CellContentClick;
             // 
             // btnOpen
             // 

@@ -18,6 +18,9 @@ namespace DocumentManagementSystem
 
     public partial class Form1 : Form
     {
+        private string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=DocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
+
+
         BindingSource binder = new BindingSource();
         public Form1()
         {
@@ -580,7 +583,7 @@ namespace DocumentManagementSystem
 
 
 
-    
+
         private void ApplyRoleToDataGridView(UserRole role)
         {
             if (dgvDocuments == null) return;
@@ -657,6 +660,75 @@ namespace DocumentManagementSystem
 
         }
 
+        private void dgvDocuments_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // 1. Tıklanan yer başlık veya boşluk olmamalı (RowIndex >= 0)
+            // 2. Tıklanan sütunun adı senin koyduğun "btnOpen" olmalı
+            if (e.RowIndex >= 0 && dgvDocuments.Columns[e.ColumnIndex].Name == "btnOpen")
+            {
+                // Gizli olan "DocumentID" sütunundan o satırın ID'sini alıyoruz
+                // NOT: SQL sorgunda "DocumentID"yi çektiğinden ve grid'e bağladığından emin ol.
+                int id = Convert.ToInt32(dgvDocuments.Rows[e.RowIndex].Cells["DocumentID"].Value);
+
+                // Birazdan yazacağımız metodu çağırıyoruz
+                OpenDoc(id);
+            }
+        }
+
+        private void OpenDoc(int id)
+        {
+            string dosyaYolu = "";
+
+            // 1. Veritabanına bağlanıp dosya yolunu (FilePath) çekiyoruz
+            // connectionString değişkeninin yukarıda tanımlı olduğunu varsayıyorum.
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    // SQL Sorgusu: ID'si bu olan belgenin yolunu getir
+                    string query = "SELECT FilePath FROM Documents WHERE DocumentID = @ID";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", id);
+
+                        object result = cmd.ExecuteScalar(); // Tek bir bilgi (yol) geleceği için ExecuteScalar
+                        if (result != null)
+                        {
+                            dosyaYolu = result.ToString();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Dosya yolu veritabanından alınırken hata: " + ex.Message);
+                    return; // Hata varsa devam etme, çık
+                }
+            }
+
+            // 2. Dosyayı Windows ile Açma İşlemi
+            if (!string.IsNullOrEmpty(dosyaYolu) && System.IO.File.Exists(dosyaYolu))
+            {
+                try
+                {
+                    // Bu komut dosyayı varsayılan programıyla (Word, PDF okuyucu vs.) açar
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = dosyaYolu,
+                        UseShellExecute = true  // <--- İŞTE SİHİRLİ KOD BU!
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Dosya açılırken hata oluştu: " + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Dosya bulunamadı!\nAranan Yol: " + dosyaYolu + "\n\nDosya silinmiş veya taşınmış olabilir.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
     }
 }

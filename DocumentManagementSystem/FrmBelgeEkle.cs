@@ -109,7 +109,8 @@ namespace DocumentManagementSystem
             new SqlParameter("@FileSize", new FileInfo(selectedFilePath).Length), // Boyut
             new SqlParameter("@CategoryID", Convert.ToInt32(cmbCategory.SelectedValue)),
             new SqlParameter("@DepartmentID", Convert.ToInt32(cmbDepartment.SelectedValue)),
-            new SqlParameter("@UploadedByUserID", UserSession.UserId)
+            new SqlParameter("@UploadedByUserID", UserSession.UserId),
+            new SqlParameter("@FilePath", selectedFilePath)
         };
 
                 // 3. SqlHelper üzerinden prosedürü çağır
