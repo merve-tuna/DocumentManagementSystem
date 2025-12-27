@@ -230,7 +230,7 @@ namespace DocumentManagementSystem
             btnAction.Name = "btnAction";
             btnAction.Size = new Size(95, 30);
             btnAction.TabIndex = 5;
-            btnAction.Text = "btnSave";
+            btnAction.Text = "Kaydet";
             btnAction.UseVisualStyleBackColor = true;
             btnAction.Click += btnAction_Click;
             // 

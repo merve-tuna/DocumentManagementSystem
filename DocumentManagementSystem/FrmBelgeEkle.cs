@@ -143,6 +143,28 @@ namespace DocumentManagementSystem
         // --- BUTON TIKLAMALARI ---
         private void btnAction_Click(object sender, EventArgs e)
         {
+            // FrmBelgeEkle.cs içerisindeki Kaydet butonu:
+
+            int initialStatusID = 1; // Varsayılan: Onay Bekliyor
+
+            // Eğer Admin (1) yüklüyorsa direkt Yayınlandı (2) olsun.
+            // Editör veya Üretici yüklüyorsa Onay Bekliyor (1) kalsın.
+            if (UserSession.UserId == UserSession.ADMIN_ID) // UserSession'daki RoleID kontrolü daha sağlıklı olur
+            {
+                initialStatusID = 4; // Yayınlandı
+            }
+            if (UserSession.UserId == UserSession.EDITOR_ID)
+            {
+                initialStatusID = 3; // Onay Bekliyor
+            }
+            if (UserSession.UserId == UserSession.URETICI_ID)
+            {
+                initialStatusID = 2; // Onay Bekliyor
+            }
+
+            // ... SQL INSERT komutuna parametre olarak @StatusID ekle ve initialStatusID değerini gönder ...
+            // cmd.Parameters.AddWithValue("@StatusID", initialStatusID);
+
             SaveDocument();
         }
 
