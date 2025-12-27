@@ -29,13 +29,15 @@
         private void InitializeComponent()
         {
             button1 = new Button();
-            dataGridView1 = new DataGridView();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            dgvTrash = new DataGridView();
+            panel1 = new Panel();
+            ((System.ComponentModel.ISupportInitialize)dgvTrash).BeginInit();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // button1
             // 
-            button1.Location = new Point(84, 29);
+            button1.Location = new Point(12, 12);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 0;
@@ -43,31 +45,42 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
-            // dataGridView1
+            // dgvTrash
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(3, 96);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(576, 299);
-            dataGridView1.TabIndex = 1;
+            dgvTrash.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvTrash.Location = new Point(0, 60);
+            dgvTrash.Name = "dgvTrash";
+            dgvTrash.RowHeadersWidth = 51;
+            dgvTrash.Size = new Size(800, 389);
+            dgvTrash.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(button1);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(800, 54);
+            panel1.TabIndex = 2;
             // 
             // FrmCopKutusu
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(dataGridView1);
-            Controls.Add(button1);
+            Controls.Add(panel1);
+            Controls.Add(dgvTrash);
             Name = "FrmCopKutusu";
             Text = "FrmCopKutusu";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvTrash).EndInit();
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
         private Button button1;
-        private DataGridView dataGridView1;
+        private DataGridView dgvTrash;
+        private Panel panel1;
     }
 }

@@ -5,15 +5,15 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 
+
 namespace DocumentManagementSystem
 {
-    // 1. ADIM: Rolleri tanýmladýðýmýz Enum yapýsý (Class'ýn dýþýna ekledik)
     public enum UserRole
     {
         Admin,
         Editor,
-        Employee, // Çalýþan
-        Reader    // Okuyucu
+        Employee, 
+        Reader    
     }
 
     public partial class Form1 : Form
@@ -37,12 +37,10 @@ namespace DocumentManagementSystem
 
         private void UpdateLabels()
         {
-            // 1. Kayýt Sayýsý (Toplam Listelenen)
             if (binder != null)
             {
                 lblRecordCount.Text = $"Toplam {binder.Count} belge listelendi";
             }
-
         }
 
         private void RefreshDocumentList()
@@ -440,7 +438,6 @@ namespace DocumentManagementSystem
 
                 DataTable dt = SqlHelper.GetDataByProcedure("storedprocedure_FilterDocuments", parameters);
 
-                //MessageBox.Show($"LoadInitialData Çalýþtý!\nGelen Satýr Sayýsý: {dt.Rows.Count}");
 
                 // DataGridView'e baðla
                 if (dgvDocuments != null)
@@ -464,7 +461,10 @@ namespace DocumentManagementSystem
             {
                 try
                 {
-                    // Kolon baþlýklarýný Türkçeleþtir
+                    // ConfigureDataGridView metodunun içine ekle:
+                    if (dgvDocuments.Columns.Contains("UploadedByUserID"))
+                        dgvDocuments.Columns["UploadedByUserID"].Visible = false; // Kullanıcı görmesin ama biz kodda kullanalım
+                    
                     if (dgvDocuments.Columns.Contains("DocumentID"))
                         //dgvDocuments.Columns["DocumentID"].HeaderText = "Belge ID
                         dgvDocuments.Columns["DocumentID"].Visible = false;
@@ -486,7 +486,7 @@ namespace DocumentManagementSystem
 
 
                     if (dgvDocuments.Columns.Contains("Description"))
-                        dgvDocuments.Columns["Description"].HeaderText = "Açýklama";
+                        dgvDocuments.Columns["Description"].HeaderText = "Açıklama";
                     dgvDocuments.Columns["Description"].Visible = false;
 
 
@@ -673,8 +673,148 @@ namespace DocumentManagementSystem
                 // Birazdan yazacağımız metodu çağırıyoruz
                 OpenDoc(id);
             }
-        }
 
+            if (e.RowIndex >= 0 && dgvDocuments.Columns[e.ColumnIndex].Name == "btnDownload")
+            {
+                // Satırdaki diğer verileri al (Örn: Dosya Adı, ID vb.)
+                // "DosyaAdi" yazan yere senin gridindeki dosya ismini tutan kolonun adını yaz.
+                string varsayilanDosyaAdi = dgvDocuments.Rows[e.RowIndex].Cells["DocumentName"].Value.ToString();
+
+                // Eğer veritabanından ID ile çekeceksen ID'yi al:
+                // int belgeId = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["ID"].Value);
+
+                // 2. KAYDETME DİYALOĞU AÇMA (Hedef klasör seçimi)
+                using (SaveFileDialog sfd = new SaveFileDialog())
+                {
+
+                    sfd.FileName = varsayilanDosyaAdi; // Kullanıcıya varsayılan bir ad öner
+                    sfd.Filter = "PDF Dosyaları (*.pdf)|*.pdf"; // Filtre ekleyebilirsin
+                    sfd.Title = "Belgeyi Nereye Kaydetmek İstersiniz?";
+
+                    // Kullanıcı "Kaydet"e bastıysa işlem başlar
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            string hedefYol = sfd.FileName;
+
+                            // --- 3. DOSYAYI OLUŞTURMA/İNDİRME ---
+
+
+                            // Burada örnek olarak boş bir dosya oluşturuyorum (Test için):
+                            File.WriteAllBytes(hedefYol, new byte[0]);
+
+                            // 4. UYARI MESAJI
+                            MessageBox.Show("İndirildi: \n" + hedefYol, "İndirildi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Dosya indirilirken bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+            // 1. Tıklanan yer geçerli bir buton mu?
+            if (e.RowIndex >= 0 && dgvDocuments.Columns[e.ColumnIndex].Name == "btnDelete")
+            {
+                // 1. Okuyucu Kontrolü (ID: 4) - Hiçbir şeye basamaz.
+                if (UserSession.UserId == UserSession.OKUYUCU_ID) // ID 4
+                {
+                    MessageBox.Show("Silme yetkiniz bulunmamaktadır.", "Yetkisiz İşlem", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 2. Gerekli Verileri Alalım
+                int docId = Convert.ToInt32(dgvDocuments.Rows[e.RowIndex].Cells["DocumentID"].Value);
+                string dosyaAdi = dgvDocuments.Rows[e.RowIndex].Cells["DocumentName"].Value.ToString();
+
+                // BURASI ÇOK ÖNEMLİ: Belgeyi kim yükledi? (Bu kolonun Grid'de olduğundan emin ol)
+                // Eğer veritabanından 'UploadedBy' olarak ID geliyorsa onu kullan.
+                // Örnek olarak kolon adının 'UploadedByUserID' olduğunu varsayıyorum.
+                int uploaderId = 0;
+                if (dgvDocuments.Columns.Contains("UploadedByUserID") && dgvDocuments.Rows[e.RowIndex].Cells["UploadedByUserID"].Value != DBNull.Value)
+                {
+                    uploaderId = Convert.ToInt32(dgvDocuments.Rows[e.RowIndex].Cells["UploadedByUserID"].Value);
+                }
+                else
+                {
+                    // Eğer bu bilgi yoksa güvenlik gereği işleme devam etme veya hata ver
+                    MessageBox.Show("Belge sahibi bilgisi alınamadı. Lütfen sistem yöneticisine başvurun.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                int currentUserId = UserSession.UserId;
+                bool yetkiVar = false;
+
+                // 3. YETKİ KONTROLÜ (SENİN KURALLARIN)
+
+                // KURAL: ID 1 (Admin) tüm belgeleri silebilir
+                if (currentUserId == UserSession.ADMIN_ID)
+                {
+                    yetkiVar = true;
+                }
+                // KURAL: ID 2 (Editör), kendisinin (2) ve Üreticinin (3) yüklediklerini silebilir
+                else if (currentUserId == UserSession.EDITOR_ID)
+                {
+                    // Yükleyen kişi Editör(2) veya Üretici(3) ise sil
+                    if (uploaderId == UserSession.EDITOR_ID || uploaderId == UserSession.URETICI_ID)
+                    {
+                        yetkiVar = true;
+                    }
+                }
+                // KURAL: ID 3 (Üretici) sadece kendi yüklediği (3) belgeleri silebilir
+                else if (currentUserId == UserSession.URETICI_ID)
+                {
+                    if (uploaderId == UserSession.URETICI_ID) // Yani kendisine aitse
+                    {
+                        yetkiVar = true;
+                    }
+                }
+
+                // Yetki yoksa durdur
+                if (!yetkiVar)
+                {
+                    MessageBox.Show("Bu belgeyi silmek için yetkiniz yok.\nSadece yetki alanınızdaki belgeleri silebilirsiniz.", "Erişim Engellendi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+
+                // 4. ONAY VE SİLME
+                DialogResult cevap = MessageBox.Show($"'{dosyaAdi}' adlı belge Çöp Kutusu'na taşınacak.\nOnaylıyor musunuz?", "Silme Onayı", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (cevap == DialogResult.Yes)
+                {
+                    // Artık ID gönderiyoruz, isim değil.
+                    SoftDeleteIslemiYap(docId);
+                    RefreshDocumentList();
+                }
+            }
+        }
+        private void SoftDeleteIslemiYap(int docId)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_MoveToRecycleBin", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // DÜZELTİLMİŞ PARAMETRELER:
+                        cmd.Parameters.AddWithValue("@DocumentID", docId);
+                        cmd.Parameters.AddWithValue("@DeletedByUserID", UserSession.UserId);
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Silindi.", "Silindi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
         private void OpenDoc(int id)
         {
             string dosyaYolu = "";
