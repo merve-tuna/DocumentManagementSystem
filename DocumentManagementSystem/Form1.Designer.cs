@@ -37,7 +37,6 @@
             btnMyDocuments = new Button();
             btnDocumentAdd = new Button();
             cmbUserRole = new ComboBox();
-            lblUserIconA = new Label();
             pnlHeader = new Panel();
             lblRecordCount = new Label();
             panel1 = new Panel();
@@ -54,6 +53,9 @@
             dtpEndDate = new DateTimePicker();
             dtpStartDate = new DateTimePicker();
             dgvDocuments = new DataGridView();
+            btnOpen = new DataGridViewButtonColumn();
+            btnDownload = new DataGridViewButtonColumn();
+            btnDelete = new DataGridViewButtonColumn();
             pnlSidebar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)lblUserIcon).BeginInit();
             pnlHeader.SuspendLayout();
@@ -70,7 +72,6 @@
             pnlSidebar.Controls.Add(btnMyDocuments);
             pnlSidebar.Controls.Add(btnDocumentAdd);
             pnlSidebar.Controls.Add(cmbUserRole);
-            pnlSidebar.Controls.Add(lblUserIconA);
             pnlSidebar.Dock = DockStyle.Left;
             pnlSidebar.Location = new Point(0, 0);
             pnlSidebar.Name = "pnlSidebar";
@@ -146,19 +147,6 @@
             cmbUserRole.Name = "cmbUserRole";
             cmbUserRole.Size = new Size(120, 25);
             cmbUserRole.TabIndex = 12;
-            // 
-            // lblUserIconA
-            // 
-            lblUserIconA.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            lblUserIconA.AutoSize = true;
-            lblUserIconA.Font = new Font("Arial", 9F);
-            lblUserIconA.ForeColor = SystemColors.Control;
-            lblUserIconA.Location = new Point(87, 44);
-            lblUserIconA.Name = "lblUserIconA";
-            lblUserIconA.Size = new Size(66, 17);
-            lblUserIconA.TabIndex = 13;
-            lblUserIconA.Text = "Kullanıcı:";
-            lblUserIconA.Click += lblUserIcon_Click;
             // 
             // pnlHeader
             // 
@@ -319,12 +307,37 @@
             // dgvDocuments
             // 
             dgvDocuments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDocuments.Location = new Point(200, 149);
+            dgvDocuments.Columns.AddRange(new DataGridViewColumn[] { btnOpen, btnDownload, btnDelete });
+            dgvDocuments.Location = new Point(200, 148);
             dgvDocuments.Name = "dgvDocuments";
             dgvDocuments.RowHeadersWidth = 51;
             dgvDocuments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDocuments.Size = new Size(600, 301);
             dgvDocuments.TabIndex = 2;
+            // 
+            // btnOpen
+            // 
+            btnOpen.HeaderText = "Görüntüle";
+            btnOpen.MinimumWidth = 6;
+            btnOpen.Name = "btnOpen";
+            btnOpen.UseColumnTextForButtonValue = true;
+            btnOpen.Width = 125;
+            // 
+            // btnDownload
+            // 
+            btnDownload.HeaderText = "İndir";
+            btnDownload.MinimumWidth = 6;
+            btnDownload.Name = "btnDownload";
+            btnDownload.UseColumnTextForButtonValue = true;
+            btnDownload.Width = 125;
+            // 
+            // btnDelete
+            // 
+            btnDelete.HeaderText = "Sil";
+            btnDelete.MinimumWidth = 6;
+            btnDelete.Name = "btnDelete";
+            btnDelete.UseColumnTextForButtonValue = true;
+            btnDelete.Width = 125;
             // 
             // Form1
             // 
@@ -337,7 +350,6 @@
             Name = "Form1";
             Text = "Form1";
             pnlSidebar.ResumeLayout(false);
-            pnlSidebar.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)lblUserIcon).EndInit();
             pnlHeader.ResumeLayout(false);
             pnlHeader.PerformLayout();
@@ -366,7 +378,6 @@
         private ComboBox cmbUserRole;
         private ComboBox cmbCategory;
         private ComboBox cmbDepartment;
-        private Label lblUserIconA;
         private DateTimePicker dtpEndDate;
         private DateTimePicker dtpStartDate;
         private PictureBox lblUserIcon;
@@ -374,5 +385,8 @@
         private TextBox txtSearch;
         private Button btnSearch;
         private Label lblRecordCount;
+        private DataGridViewButtonColumn btnOpen;
+        private DataGridViewButtonColumn btnDownload;
+        private DataGridViewButtonColumn btnDelete;
     }
 }

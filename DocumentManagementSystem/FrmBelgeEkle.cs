@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,8 +19,8 @@ namespace DocumentManagementSystem
         private string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=DocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
 
         // --- DEĞİŞKENLER ---
-        private int _currentUserId = 1;
-        private string _currentUserRole = "Admin";
+        //private int _currentUserId = 1;
+        //private string _currentUserRole = "Admin";
 
         private string selectedFilePath = "";
         private bool hasUnsavedChanges = false;
@@ -27,9 +28,10 @@ namespace DocumentManagementSystem
         public FrmBelgeEkle()
         {
             InitializeComponent();
+            LoadComboBoxes();
             SetupUI();
             this.FormClosing += new FormClosingEventHandler(FrmBelgeEkle_FormClosing);
-            LoadComboBoxes();
+            
         }
 
         // --- BAŞLANGIÇ AYARLARI ---
@@ -107,7 +109,7 @@ namespace DocumentManagementSystem
             new SqlParameter("@FileSize", new FileInfo(selectedFilePath).Length), // Boyut
             new SqlParameter("@CategoryID", Convert.ToInt32(cmbCategory.SelectedValue)),
             new SqlParameter("@DepartmentID", Convert.ToInt32(cmbDepartment.SelectedValue)),
-            new SqlParameter("@UploadedByUserID", _currentUserId)
+            new SqlParameter("@UploadedByUserID", UserSession.UserId)
         };
 
                 // 3. SqlHelper üzerinden prosedürü çağır
@@ -116,7 +118,7 @@ namespace DocumentManagementSystem
                 if (sonuc != 0)
                 {
                     // 1. Önce kullanıcıya mesaj ver
-                    MessageBox.Show("Belge başarıyla veritabanına kaydedildi!", "İşlem Başarılı");
+                    MessageBox.Show("Kaydedildi", "Kaydedildi");
 
                     // 2. Değişiklik takibini kapat (Artık kaydedildi, uyarı vermesin)
                     hasUnsavedChanges = false;
@@ -161,7 +163,7 @@ namespace DocumentManagementSystem
         // --- FORM KAPATMA ---
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Close();
+               this.Close();
         }
 
         private void FrmBelgeEkle_FormClosing(object sender, FormClosingEventArgs e)

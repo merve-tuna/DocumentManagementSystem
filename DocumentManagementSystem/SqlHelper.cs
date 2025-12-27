@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration; // Eğer App.config'den okuyacaksan burası gerekli
@@ -57,7 +58,7 @@ namespace DocumentManagementSystem
         }
 
         // Veri Ekleme, Silme ve Güncelleme işlemleri için bu metodu kullanacağız
-       
+
 
     }
 }
