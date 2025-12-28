@@ -28,18 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmBelgeGoruntule));
             richTextBox1 = new RichTextBox();
             SuspendLayout();
             // 
             // richTextBox1
             // 
             richTextBox1.Dock = DockStyle.Fill;
+            richTextBox1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 162);
             richTextBox1.Location = new Point(0, 0);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.ReadOnly = true;
             richTextBox1.Size = new Size(800, 450);
             richTextBox1.TabIndex = 0;
-            richTextBox1.Text = "Lorem Ipsum";
+            richTextBox1.Text = resources.GetString("richTextBox1.Text");
             // 
             // FrmBelgeGoruntule
             // 

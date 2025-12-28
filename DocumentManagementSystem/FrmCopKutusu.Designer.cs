@@ -31,6 +31,8 @@
             button1 = new Button();
             dgvTrash = new DataGridView();
             panel1 = new Panel();
+            btnRestore = new DataGridViewButtonColumn();
+            btnHardDelete = new DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)dgvTrash).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -48,6 +50,7 @@
             // dgvTrash
             // 
             dgvTrash.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvTrash.Columns.AddRange(new DataGridViewColumn[] { btnRestore, btnHardDelete });
             dgvTrash.Location = new Point(0, 60);
             dgvTrash.Name = "dgvTrash";
             dgvTrash.ReadOnly = true;
@@ -63,6 +66,26 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(800, 54);
             panel1.TabIndex = 2;
+            // 
+            // btnRestore
+            // 
+            btnRestore.HeaderText = "Geri Getir";
+            btnRestore.MinimumWidth = 6;
+            btnRestore.Name = "btnRestore";
+            btnRestore.ReadOnly = true;
+            btnRestore.Text = "Geri Getir";
+            btnRestore.UseColumnTextForButtonValue = true;
+            btnRestore.Width = 125;
+            // 
+            // btnHardDelete
+            // 
+            btnHardDelete.HeaderText = "Kalıcı Sil";
+            btnHardDelete.MinimumWidth = 6;
+            btnHardDelete.Name = "btnHardDelete";
+            btnHardDelete.ReadOnly = true;
+            btnHardDelete.Text = "Kalıcı Sil";
+            btnHardDelete.UseColumnTextForButtonValue = true;
+            btnHardDelete.Width = 125;
             // 
             // FrmCopKutusu
             // 
@@ -83,5 +106,7 @@
         private Button button1;
         private DataGridView dgvTrash;
         private Panel panel1;
+        private DataGridViewButtonColumn btnRestore;
+        private DataGridViewButtonColumn btnHardDelete;
     }
 }

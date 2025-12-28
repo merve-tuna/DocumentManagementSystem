@@ -35,6 +35,8 @@ namespace DocumentManagementSystem
 
         }
 
+
+
         private void UpdateLabels()
         {
             if (binder != null)
@@ -720,90 +722,37 @@ namespace DocumentManagementSystem
                 if (cevap == DialogResult.Yes)
                 {
                     // Artık ID gönderiyoruz, isim değil.
-                    SoftDeleteIslemiYap(docId);
+                    SoftDeleteIslemiYap(docId, currentUserId);
                     RefreshDocumentList();
+                    MessageBox.Show("Belge çöp kutusuna taşındı.");
                 }
             }
         }
-        private void SoftDeleteIslemiYap(int docId)
+
+
+        public void SoftDeleteIslemiYap(int docId, int silenKisiId)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(connectionString)) // Bağlantı cümleni buraya private string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=DocumentManagementSystem;Integrated Security=True;TrustServerCertificate=True";
+
             {
-                try
-                {
-                    using (SqlCommand cmd = new SqlCommand("sp_MoveToRecycleBin", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
+                // Hem silindi işaretini koyuyoruz, hem silme tarihini atıyoruz, HEM DE SİLEN KİŞİYİ kaydediyoruz.
+                string query = @"UPDATE Documents 
+                         SET IsDeleted = 1, 
+                             DeletedDate = GETDATE(), 
+                             DeletedByUserID = @DeletedByUserID 
+                         WHERE DocumentID = @DocumentID";
 
-                        // DÜZELTİLMİŞ PARAMETRELER:
-                        cmd.Parameters.AddWithValue("@DocumentID", docId);
-                        cmd.Parameters.AddWithValue("@DeletedByUserID", UserSession.UserId);
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@DocumentID", docId);
+                cmd.Parameters.AddWithValue("@DeletedByUserID", silenKisiId); // Burası kritik!
 
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    MessageBox.Show("Silindi.", "Silindi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
             }
         }
-        private void OpenDoc(int id)
-        {
-            string dosyaYolu = "";
 
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    // SQL Sorgusu: ID'si bu olan belgenin yolunu getir
-                    string query = "SELECT FilePath FROM Documents WHERE DocumentID = @DocumentID";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@DocumentID", id);
-
-                        object result = cmd.ExecuteScalar(); // Tek bir bilgi (yol) geleceği için ExecuteScalar
-                        if (result != null)
-                        {
-                            dosyaYolu = result.ToString();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Dosya yolu veritabanından alınırken hata: " + ex.Message);
-                    return; // Hata varsa devam etme, çık
-                }
-            }
-
-            // 2. Dosyayı Windows ile Açma İşlemi
-            if (!string.IsNullOrEmpty(dosyaYolu) && System.IO.File.Exists(dosyaYolu))
-            {
-                try
-                {
-                    // Bu komut dosyayı varsayılan programıyla (Word, PDF okuyucu vs.) açar
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = dosyaYolu,
-                        UseShellExecute = true  // <--- İŞTE SİHİRLİ KOD BU!
-                    });
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Dosya açılırken hata oluştu: " + ex.Message);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Dosya bulunamadı!\nAranan Yol: " + dosyaYolu + "\n\nDosya silinmiş veya taşınmış olabilir.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
 
         private void BelgeyiAc(int belgeId)
         {
