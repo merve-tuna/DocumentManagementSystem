@@ -33,7 +33,6 @@
             dgvOnayBekleyenler = new DataGridView();
             btnOnayla = new DataGridViewButtonColumn();
             btnReddet = new DataGridViewButtonColumn();
-            txtRedSebebi = new DataGridViewTextBoxColumn();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvOnayBekleyenler).BeginInit();
             SuspendLayout();
@@ -60,7 +59,7 @@
             // dgvOnayBekleyenler
             // 
             dgvOnayBekleyenler.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvOnayBekleyenler.Columns.AddRange(new DataGridViewColumn[] { btnOnayla, btnReddet, txtRedSebebi });
+            dgvOnayBekleyenler.Columns.AddRange(new DataGridViewColumn[] { btnOnayla, btnReddet });
             dgvOnayBekleyenler.Location = new Point(0, 60);
             dgvOnayBekleyenler.MultiSelect = false;
             dgvOnayBekleyenler.Name = "dgvOnayBekleyenler";
@@ -86,14 +85,6 @@
             btnReddet.ReadOnly = true;
             btnReddet.Width = 125;
             // 
-            // txtRedSebebi
-            // 
-            txtRedSebebi.HeaderText = "Red Sebebi";
-            txtRedSebebi.MinimumWidth = 6;
-            txtRedSebebi.Name = "txtRedSebebi";
-            txtRedSebebi.ReadOnly = true;
-            txtRedSebebi.Width = 125;
-            // 
             // FrmOnayBekleyenler
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -103,7 +94,7 @@
             Controls.Add(panel1);
             MinimizeBox = false;
             Name = "FrmOnayBekleyenler";
-            Text = "FrmOnayBekleyenler";
+            Text = "Onay Sayfası";
             Load += FrmOnayBekleyenler_Load;
             panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvOnayBekleyenler).EndInit();
@@ -117,6 +108,5 @@
         private DataGridView dgvOnayBekleyenler;
         private DataGridViewButtonColumn btnOnayla;
         private DataGridViewButtonColumn btnReddet;
-        private DataGridViewTextBoxColumn txtRedSebebi;
     }
 }

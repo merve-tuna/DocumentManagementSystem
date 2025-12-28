@@ -60,7 +60,7 @@
             Controls.Add(panel1);
             MinimizeBox = false;
             Name = "FrmYardim";
-            Text = "FrmYardim";
+            Text = "Yardım";
             panel1.ResumeLayout(false);
             ResumeLayout(false);
         }

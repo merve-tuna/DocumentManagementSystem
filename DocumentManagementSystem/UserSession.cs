@@ -17,7 +17,7 @@ namespace DocumentManagementSystem
         // Veritabanındaki RoleID karşılıkları
         public const int ADMIN_ID = 1;
         public const int EDITOR_ID = 2;
-        public const int URETICI_ID = 3;
+        public const int CALISAN_ID = 3;
         public const int OKUYUCU_ID = 4;
     }
 }

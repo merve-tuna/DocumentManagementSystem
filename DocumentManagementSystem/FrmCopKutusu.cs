@@ -88,9 +88,9 @@ namespace DocumentManagementSystem
             int documentId = Convert.ToInt32(dgvTrash.Rows[e.RowIndex].Cells["DocumentID"].Value);
 
             // ÖNEMLİ: RoleID = 3 (ÜRETİCİ) hiçbir işlem yapamaz - EN BAŞTA KONTROL ET
-            if (UserSession.RoleId == UserSession.URETICI_ID)
+            if (UserSession.RoleId == UserSession.CALISAN_ID)
             {
-                MessageBox.Show("Üretici rolündeki kullanıcılar Çöp Kutusu işlemi yapamaz!",
+                MessageBox.Show("Çalışan rolündeki kullanıcılar Çöp Kutusu işlemi yapamaz!",
                                 "Yetkisiz İşlem",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Stop);
@@ -156,8 +156,8 @@ namespace DocumentManagementSystem
                         }
                         else if (resultCode == 1)
                         {
-                            MessageBox.Show("İşlem başarıyla tamamlandı.",
-                                            "Başarılı",
+                            MessageBox.Show("Tamalandı.",
+                                            "İşlem Durumu",
                                             MessageBoxButtons.OK,
                                             MessageBoxIcon.Information);
                         }

@@ -92,9 +92,11 @@ namespace DocumentManagementSystem
 
         private void SaveDocument()
         {
-            // 1. Validasyonlar (Aynı kalıyor)
-            if (string.IsNullOrWhiteSpace(txtDocName.Text) || cmbDepartment.SelectedIndex == -1 ||
-                cmbCategory.SelectedIndex == -1 || string.IsNullOrEmpty(selectedFilePath))
+            // 1. Validasyonlar
+            if (string.IsNullOrWhiteSpace(txtDocName.Text) ||
+                cmbDepartment.SelectedIndex == -1 ||
+                cmbCategory.SelectedIndex == -1 ||
+                string.IsNullOrEmpty(selectedFilePath))
             {
                 MessageBox.Show("Lütfen tüm zorunlu alanları doldurunuz.", "Uyarı");
                 return;
@@ -102,40 +104,45 @@ namespace DocumentManagementSystem
 
             try
             {
+                // StatusID'yi belirle
+                int statusID = 1; // Varsayılan: Taslak
 
-                // 2. Parametreleri SQL'deki isimlerle BİREBİR EŞLEŞTİRİYORUZ
-                SqlParameter[] p = {
-            new SqlParameter("@DocumentName", txtDocName.Text),
-            new SqlParameter("@Description", txtDescription.Text),
-            new SqlParameter("@FileType", Path.GetExtension(selectedFilePath)), // Uzantı
-            new SqlParameter("@FileSize", new FileInfo(selectedFilePath).Length), // Boyut
-            new SqlParameter("@CategoryID", Convert.ToInt32(cmbCategory.SelectedValue)),
-            new SqlParameter("@DepartmentID", Convert.ToInt32(cmbDepartment.SelectedValue)),
-            new SqlParameter("@UploadedByUserID", UserSession.UserId)
-        };
+                if (UserSession.RoleId == 1) // Admin
+                    statusID = 4;
+                else if (UserSession.RoleId == 2) // Editör
+                    statusID = 3;
+                else if (UserSession.RoleId == 3) // Üretici
+                    statusID = 2;
 
-                // 3. SqlHelper üzerinden prosedürü çağır
-                int sonuc = SqlHelper.ExecuteProcedure("sp_InsertDocument", p);
-
-                if (sonuc != 0)
+                // Parametreleri oluştur (İSİMLER STORED PROCEDURE İLE BİREBİR EŞLEŞMELİ!)
+                SqlParameter[] parameters = new SqlParameter[]
                 {
-                    // 1. Önce kullanıcıya mesaj ver
-                    MessageBox.Show("Kaydedildi", "Kaydedildi");
+            new SqlParameter("@DocumentName", SqlDbType.NVarChar, 255) { Value = txtDocName.Text.Trim() },
+            new SqlParameter("@Description", SqlDbType.NVarChar, 1000) { Value = string.IsNullOrEmpty(txtDescription.Text) ? (object)DBNull.Value : txtDescription.Text.Trim() },
+            new SqlParameter("@FileType", SqlDbType.NVarChar, 50) { Value = Path.GetExtension(selectedFilePath) },
+            new SqlParameter("@FileSize", SqlDbType.BigInt) { Value = new FileInfo(selectedFilePath).Length },
+            new SqlParameter("@CategoryID", SqlDbType.Int) { Value = Convert.ToInt32(cmbCategory.SelectedValue) },
+            new SqlParameter("@DepartmentID", SqlDbType.Int) { Value = Convert.ToInt32(cmbDepartment.SelectedValue) },
+            new SqlParameter("@UploadedByUserID", SqlDbType.Int) { Value = UserSession.UserId },
+            new SqlParameter("@StatusID", SqlDbType.Int) { Value = statusID }
+                };
 
-                    // 2. Değişiklik takibini kapat (Artık kaydedildi, uyarı vermesin)
+                // Prosedürü çağır
+                int result = SqlHelper.ExecuteProcedure("sp_InsertDocument", parameters);
+
+                if (result > 0 || result == -1) 
+                {
+                    MessageBox.Show("Kaydedildi", "Kaydedildi");
                     hasUnsavedChanges = false;
 
-                    // 3. BUTONLARI AYARLA
                     btnAction.Enabled = false;
-                    btnDraft.Enabled = false; 
-                    btnClear.Enabled = true; 
-
+                    btnDraft.Enabled = false;
+                    btnClear.Enabled = true;
                 }
             }
             catch (Exception ex)
             {
-                // image_07bcae.png'deki hatayı burası yakalar
-                MessageBox.Show("Kayıt hatası: " + ex.Message);
+                MessageBox.Show("Kayıt hatası: " + ex.Message, "HATA");
             }
         }
 
@@ -158,7 +165,7 @@ namespace DocumentManagementSystem
                 statusID = 3;
             }
             // Üretici (3) eklerse -> EDİTÖR ONAYI BEKLİYOR (2)
-            else if (UserSession.UserId == UserSession.URETICI_ID)
+            else if (UserSession.UserId == UserSession.CALISAN_ID)
             {
                 statusID = 2;
             }
@@ -250,37 +257,45 @@ namespace DocumentManagementSystem
             // Validasyon: Belge adı zorunludur
             if (string.IsNullOrWhiteSpace(txtDocName.Text))
             {
-                MessageBox.Show("Taslak olarak kaydetmek için zorunlu alanlar girilmelidir.", "Uyarı");
+                MessageBox.Show("Belge adı girilmelidir.", "Uyarı");
+                return;
+            }
+
+            // Kategori ve Departman kontrolü
+            if (cmbCategory.SelectedIndex == -1 || cmbDepartment.SelectedIndex == -1)
+            {
+                MessageBox.Show("Kategori ve Departman seçilmelidir.", "Uyarı");
                 return;
             }
 
             try
             {
                 SqlParameter[] p = {
-            new SqlParameter("@DocumentName", txtDocName.Text),
-            new SqlParameter("@Description", txtDescription.Text),
-            new SqlParameter("@CategoryID", cmbCategory.SelectedValue ?? DBNull.Value),
-            new SqlParameter("@DepartmentID", cmbDepartment.SelectedValue ?? DBNull.Value),
-            new SqlParameter("@UploadedByUserID", UserSession.UserId)
+            new SqlParameter("@DocumentName", SqlDbType.NVarChar, 255) { Value = txtDocName.Text.Trim() },
+            new SqlParameter("@Description", SqlDbType.NVarChar, 1000) { Value = string.IsNullOrWhiteSpace(txtDescription.Text) ? (object)DBNull.Value : txtDescription.Text.Trim() },
+            new SqlParameter("@CategoryID", SqlDbType.Int) { Value = Convert.ToInt32(cmbCategory.SelectedValue) },
+            new SqlParameter("@DepartmentID", SqlDbType.Int) { Value = Convert.ToInt32(cmbDepartment.SelectedValue) },
+            new SqlParameter("@UploadedByUserID", SqlDbType.Int) { Value = UserSession.UserId }
         };
 
                 // Prosedürü çağır
                 int result = SqlHelper.ExecuteProcedure("sp_SaveAsDraft", p);
 
-                if (result != 0)
+                if (result > 0 || result == -1)
                 {
-                    MessageBox.Show("Kaydedildi.", "Kaydedildi");
+                    MessageBox.Show("Taslak olarak kaydedildi.", "Kaydedildi");
                     hasUnsavedChanges = false;
 
-                    // 3. BUTON DURUMLARINI AYARLA
-                    btnAction.Enabled = false; // Normal kaydet pasif
-                    btnDraft.Enabled = false;  // Taslak kaydet pasif (tekrar basılmasın)
+                    // Buton durumlarını ayarla
+                    btnAction.Enabled = false;
+                    btnDraft.Enabled = false;
                     btnClear.Enabled = true;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Taslak olarak kaydetmek için zorunlu alanlar girilmelidir.", "Uyarı");
+                // Gerçek hatayı göster
+                MessageBox.Show("Taslak kayıt hatası: " + ex.Message, "HATA");
             }
         }
 

@@ -71,7 +71,7 @@ namespace DocumentManagementSystem
             cmbUserRole.Items.Clear();
             cmbUserRole.Items.Add("Admin");   // ID: 1
             cmbUserRole.Items.Add("Editör");  // ID: 2
-            cmbUserRole.Items.Add("Üretici"); // ID: 3 
+            cmbUserRole.Items.Add("Çalışan"); // ID: 3 
             cmbUserRole.Items.Add("Okuyucu"); // ID: 4
             cmbUserRole.SelectedIndex = 0;
 
@@ -107,7 +107,7 @@ namespace DocumentManagementSystem
                     role = UserRole.Editor;
                     UserSession.UserId = 2;
                     break;
-                case "Üretici":
+                case "Çalışan":
                     role = UserRole.Employee;
                     UserSession.UserId = 3;
                     break;
@@ -695,15 +695,15 @@ namespace DocumentManagementSystem
                 else if (currentUserId == UserSession.EDITOR_ID)
                 {
                     // Yükleyen kişi Editör(2) veya Üretici(3) ise sil
-                    if (uploaderId == UserSession.EDITOR_ID || uploaderId == UserSession.URETICI_ID)
+                    if (uploaderId == UserSession.EDITOR_ID || uploaderId == UserSession.CALISAN_ID)
                     {
                         yetkiVar = true;
                     }
                 }
                 // KURAL: ID 3 (Üretici) sadece kendi yüklediği (3) belgeleri silebilir
-                else if (currentUserId == UserSession.URETICI_ID)
+                else if (currentUserId == UserSession.CALISAN_ID)
                 {
-                    if (uploaderId == UserSession.URETICI_ID) // Yani kendisine aitse
+                    if (uploaderId == UserSession.CALISAN_ID) // Yani kendisine aitse
                     {
                         yetkiVar = true;
                     }
@@ -760,8 +760,8 @@ namespace DocumentManagementSystem
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                // ARTIK FileType veya DocumentName DEĞİL, FilePath LAZIM
-                string query = "SELECT FilePath FROM Documents WHERE DocumentID = @DocumentID";
+                //// ARTIK FileType veya DocumentName DEĞİL, FilePath LAZIM
+                string query = "SELECT DocumentName FROM Documents WHERE DocumentID = @DocumentID";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {

@@ -30,9 +30,9 @@
         {
             button1 = new Button();
             dgvTrash = new DataGridView();
+            panel1 = new Panel();
             btnRestore = new DataGridViewButtonColumn();
             btnHardDelete = new DataGridViewButtonColumn();
-            panel1 = new Panel();
             ((System.ComponentModel.ISupportInitialize)dgvTrash).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -59,13 +59,22 @@
             dgvTrash.TabIndex = 1;
             dgvTrash.CellContentClick += dgvTrash_CellContentClick;
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(button1);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(800, 54);
+            panel1.TabIndex = 2;
+            // 
             // btnRestore
             // 
             btnRestore.HeaderText = "Geri Getir";
             btnRestore.MinimumWidth = 6;
             btnRestore.Name = "btnRestore";
             btnRestore.ReadOnly = true;
-            btnRestore.Text = "Geri Getir";
+            btnRestore.Text = "🔄";
             btnRestore.UseColumnTextForButtonValue = true;
             btnRestore.Width = 125;
             // 
@@ -75,18 +84,9 @@
             btnHardDelete.MinimumWidth = 6;
             btnHardDelete.Name = "btnHardDelete";
             btnHardDelete.ReadOnly = true;
-            btnHardDelete.Text = "Kalıcı Sil";
+            btnHardDelete.Text = "🚮";
             btnHardDelete.UseColumnTextForButtonValue = true;
             btnHardDelete.Width = 125;
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(button1);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(800, 54);
-            panel1.TabIndex = 2;
             // 
             // FrmCopKutusu
             // 
@@ -98,7 +98,7 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmCopKutusu";
-            Text = "FrmCopKutusu";
+            Text = "Çöp Kutusu";
             ((System.ComponentModel.ISupportInitialize)dgvTrash).EndInit();
             panel1.ResumeLayout(false);
             ResumeLayout(false);

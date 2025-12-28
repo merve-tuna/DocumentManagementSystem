@@ -274,7 +274,7 @@ namespace DocumentManagementSystem
             Controls.Add(panel1);
             MaximizeBox = false;
             Name = "FrmBelgeEkle";
-            Text = "FrmBelgeEkle";
+            Text = "Belge Ekle";
             pnlDropZone.ResumeLayout(false);
             pnlDropZone.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

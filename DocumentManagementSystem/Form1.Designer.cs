@@ -325,7 +325,7 @@
             btnDownload.MinimumWidth = 6;
             btnDownload.Name = "btnDownload";
             btnDownload.ReadOnly = true;
-            btnDownload.Text = "İndir";
+            btnDownload.Text = "📥";
             btnDownload.UseColumnTextForButtonValue = true;
             btnDownload.Width = 125;
             // 
@@ -335,7 +335,7 @@
             btnDelete.MinimumWidth = 6;
             btnDelete.Name = "btnDelete";
             btnDelete.ReadOnly = true;
-            btnDelete.Text = "Sil";
+            btnDelete.Text = "🗑️";
             btnDelete.UseColumnTextForButtonValue = true;
             btnDelete.Width = 125;
             // 

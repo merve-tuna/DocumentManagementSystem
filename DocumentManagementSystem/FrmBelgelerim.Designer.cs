@@ -74,7 +74,7 @@
             Controls.Add(pnlTopMenu);
             MaximizeBox = false;
             Name = "FrmBelgelerim";
-            Text = "FrmBelgelerim";
+            Text = "Belgelerim";
             pnlTopMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvMyDocs).EndInit();
             ResumeLayout(false);
