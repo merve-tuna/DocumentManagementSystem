@@ -330,8 +330,8 @@ namespace DocumentManagementSystem
 
                 if (dgvDocuments != null)
                 {
-                    binder.DataSource = dt;           
-                    dgvDocuments.DataSource = binder; 
+                    binder.DataSource = dt;
+                    dgvDocuments.DataSource = binder;
 
                 }
             }
@@ -403,7 +403,7 @@ namespace DocumentManagementSystem
 
                 if (txtSearch != null) txtSearch.Text = "";
 
-                
+
 
                 SqlParameter[] parameters = new SqlParameter[]
                 {
@@ -437,7 +437,7 @@ namespace DocumentManagementSystem
             {
                 try
                 {
-                    
+
 
                     // ConfigureDataGridView metodunun içine ekle:
                     if (dgvDocuments.Columns.Contains("UploadedByUserID"))
@@ -490,7 +490,7 @@ namespace DocumentManagementSystem
                         dgvDocuments.Columns["UploadedBy"].HeaderText = "Yükleyen";
                     dgvDocuments.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
-                    
+
                 }
 
                 catch (Exception ex)
@@ -755,8 +755,7 @@ namespace DocumentManagementSystem
         {
             string dosyaYolu = "";
 
-            // 1. Veritabanına bağlanıp dosya yolunu (FilePath) çekiyoruz
-            // connectionString değişkeninin yukarıda tanımlı olduğunu varsayıyorum.
+
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 try
@@ -808,47 +807,22 @@ namespace DocumentManagementSystem
 
         private void BelgeyiAc(int belgeId)
         {
+            string dosyaYolu = "";
+
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                // Sorgu: Sadece ilgili ID'nin verisini ve uzantısını çekiyoruz
-                string query = "SELECT DocumentName, FileType, FileData FROM Documents WHERE DocumentID = @DocumentID";
+                // ARTIK FileType veya DocumentName DEĞİL, FilePath LAZIM
+                string query = "SELECT FilePath FROM Documents WHERE DocumentID = @DocumentID";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@DocumentID", belgeId);
                     con.Open();
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    object result = cmd.ExecuteScalar();
+                    if (result != null)
                     {
-                        if (reader.Read())
-                        {
-                            // 1. Veritabanından verileri al
-                            byte[] fileData = (byte[])reader["FileData"];
-                            string uzanti = reader["FileType"].ToString(); // Örn: .pdf
-                            string ad = reader["DocumentName"].ToString();
-
-                            // 2. Geçici bir dosya yolu oluştur
-                            // Path.GetTempPath() kullanıcının Temp klasörünü bulur.
-                            // Guid.NewGuid() çakışma olmasın diye rastgele isim verir.
-                            string tempDosyaYolu = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + uzanti);
-
-                            // 3. Byte dizisini fiziksel dosyaya dönüştür ve kaydet
-                            File.WriteAllBytes(tempDosyaYolu, fileData);
-
-                            // 4. Dosyayı varsayılan programla aç
-                            try
-                            {
-                                ProcessStartInfo psi = new ProcessStartInfo(tempDosyaYolu)
-                                {
-                                    UseShellExecute = true // .NET Core/6+ kullanıyorsan bu true olmalı
-                                };
-                                Process.Start(psi);
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show("Dosya açılırken hata oluştu: " + ex.Message);
-                            }
-                        }
+                        dosyaYolu = result.ToString();
                     }
                 }
             }
@@ -864,6 +838,26 @@ namespace DocumentManagementSystem
 
                 // Fonksiyonu çağır
                 BelgeyiAc(secilenId);
+            }
+        }
+
+        private void dgvDocuments_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex > -1 && e.ColumnIndex > -1)
+            {
+                // 2. Tıklanan satırdaki Belge Adını al.
+                // DİKKAT: "BelgeAdi" yazan yere senin DataGridView'indeki belge isminin olduğu kolonun "Name"i gelmeli.
+                // Eğer kolon adını bilmiyorsan index numarası da verebilirsin: Cells[1] gibi.
+                string tiklananBelgeAdi = dgvDocuments.Rows[e.RowIndex].Cells["DocumentName"].Value.ToString();
+
+                // 3. Önizleme formunu oluştur
+                FrmBelgeGoruntule frmPreview = new FrmBelgeGoruntule();
+
+                // 4. Belge adını forma gönder
+                frmPreview.BelgeBilgisiAta(tiklananBelgeAdi);
+
+                // 5. Formu aç (ShowDialog, arkadaki forma tıklanmasını engeller, kapatılana kadar önde durur)
+                frmPreview.ShowDialog();
             }
         }
     }

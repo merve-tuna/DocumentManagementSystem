@@ -1,6 +1,6 @@
 ﻿namespace DocumentManagementSystem
 {
-    partial class FrmBelgeDetay
+    partial class FrmBelgeGoruntule
     {
         /// <summary>
         /// Required designer variable.
@@ -28,18 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
+            richTextBox1 = new RichTextBox();
             SuspendLayout();
             // 
-            // FrmBelgeDetay
+            // richTextBox1
+            // 
+            richTextBox1.Dock = DockStyle.Fill;
+            richTextBox1.Location = new Point(0, 0);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.ReadOnly = true;
+            richTextBox1.Size = new Size(800, 450);
+            richTextBox1.TabIndex = 0;
+            richTextBox1.Text = "Lorem Ipsum";
+            // 
+            // FrmBelgeGoruntule
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Name = "FrmBelgeDetay";
+            Controls.Add(richTextBox1);
+            Name = "FrmBelgeGoruntule";
             Text = "FrmBelgeDetay";
             ResumeLayout(false);
         }
 
         #endregion
+
+        private RichTextBox richTextBox1;
     }
 }

@@ -316,6 +316,7 @@
             dgvDocuments.Size = new Size(600, 301);
             dgvDocuments.TabIndex = 2;
             dgvDocuments.CellContentClick += dgvDocuments_CellContentClick;
+            dgvDocuments.CellContentDoubleClick += dgvDocuments_CellContentDoubleClick;
             dgvDocuments.CellMouseDoubleClick += dgvDocuments_CellMouseDoubleClick;
             // 
             // btnDownload
