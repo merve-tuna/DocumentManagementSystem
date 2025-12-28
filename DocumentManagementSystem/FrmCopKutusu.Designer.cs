@@ -30,9 +30,9 @@
         {
             button1 = new Button();
             dgvTrash = new DataGridView();
-            panel1 = new Panel();
             btnRestore = new DataGridViewButtonColumn();
             btnHardDelete = new DataGridViewButtonColumn();
+            panel1 = new Panel();
             ((System.ComponentModel.ISupportInitialize)dgvTrash).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -57,15 +57,7 @@
             dgvTrash.RowHeadersWidth = 51;
             dgvTrash.Size = new Size(800, 389);
             dgvTrash.TabIndex = 1;
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(button1);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(800, 54);
-            panel1.TabIndex = 2;
+            dgvTrash.CellContentClick += dgvTrash_CellContentClick;
             // 
             // btnRestore
             // 
@@ -87,6 +79,15 @@
             btnHardDelete.UseColumnTextForButtonValue = true;
             btnHardDelete.Width = 125;
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(button1);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(800, 54);
+            panel1.TabIndex = 2;
+            // 
             // FrmCopKutusu
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -94,6 +95,8 @@
             ClientSize = new Size(800, 450);
             Controls.Add(panel1);
             Controls.Add(dgvTrash);
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmCopKutusu";
             Text = "FrmCopKutusu";
             ((System.ComponentModel.ISupportInitialize)dgvTrash).EndInit();

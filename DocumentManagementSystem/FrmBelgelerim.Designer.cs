@@ -72,6 +72,7 @@
             ClientSize = new Size(800, 450);
             Controls.Add(dgvMyDocs);
             Controls.Add(pnlTopMenu);
+            MaximizeBox = false;
             Name = "FrmBelgelerim";
             Text = "FrmBelgelerim";
             pnlTopMenu.ResumeLayout(false);

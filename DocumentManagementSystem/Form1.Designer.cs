@@ -347,6 +347,7 @@
             Controls.Add(pnlHeader);
             Controls.Add(pnlSidebar);
             Controls.Add(dgvDocuments);
+            MaximizeBox = false;
             Name = "Form1";
             Text = "Form1";
             pnlSidebar.ResumeLayout(false);

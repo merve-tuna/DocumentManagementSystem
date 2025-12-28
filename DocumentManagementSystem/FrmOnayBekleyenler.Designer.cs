@@ -101,6 +101,7 @@
             ClientSize = new Size(800, 450);
             Controls.Add(dgvOnayBekleyenler);
             Controls.Add(panel1);
+            MinimizeBox = false;
             Name = "FrmOnayBekleyenler";
             Text = "FrmOnayBekleyenler";
             Load += FrmOnayBekleyenler_Load;

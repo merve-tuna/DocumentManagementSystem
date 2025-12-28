@@ -58,6 +58,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(panel1);
+            MinimizeBox = false;
             Name = "FrmYardim";
             Text = "FrmYardim";
             panel1.ResumeLayout(false);
