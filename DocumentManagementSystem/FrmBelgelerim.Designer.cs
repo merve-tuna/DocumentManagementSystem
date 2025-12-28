@@ -60,6 +60,7 @@
             dgvMyDocs.Dock = DockStyle.Fill;
             dgvMyDocs.Location = new Point(0, 54);
             dgvMyDocs.Name = "dgvMyDocs";
+            dgvMyDocs.ReadOnly = true;
             dgvMyDocs.RowHeadersWidth = 51;
             dgvMyDocs.Size = new Size(800, 396);
             dgvMyDocs.TabIndex = 2;

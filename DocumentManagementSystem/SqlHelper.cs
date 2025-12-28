@@ -57,8 +57,6 @@ namespace DocumentManagementSystem
             }
         }
 
-        // Veri Ekleme, Silme ve Güncelleme işlemleri için bu metodu kullanacağız
-
 
     }
 }

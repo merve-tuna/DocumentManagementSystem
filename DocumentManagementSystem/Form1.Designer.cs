@@ -53,7 +53,6 @@
             dtpEndDate = new DateTimePicker();
             dtpStartDate = new DateTimePicker();
             dgvDocuments = new DataGridView();
-            btnOpen = new DataGridViewButtonColumn();
             btnDownload = new DataGridViewButtonColumn();
             btnDelete = new DataGridViewButtonColumn();
             pnlSidebar.SuspendLayout();
@@ -141,6 +140,7 @@
             // cmbUserRole
             // 
             cmbUserRole.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cmbUserRole.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbUserRole.Font = new Font("Arial", 9F);
             cmbUserRole.FormattingEnabled = true;
             cmbUserRole.Location = new Point(62, 16);
@@ -307,28 +307,23 @@
             // dgvDocuments
             // 
             dgvDocuments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDocuments.Columns.AddRange(new DataGridViewColumn[] { btnOpen, btnDownload, btnDelete });
+            dgvDocuments.Columns.AddRange(new DataGridViewColumn[] { btnDownload, btnDelete });
             dgvDocuments.Location = new Point(200, 148);
             dgvDocuments.Name = "dgvDocuments";
+            dgvDocuments.ReadOnly = true;
             dgvDocuments.RowHeadersWidth = 51;
             dgvDocuments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDocuments.Size = new Size(600, 301);
             dgvDocuments.TabIndex = 2;
             dgvDocuments.CellContentClick += dgvDocuments_CellContentClick;
-            // 
-            // btnOpen
-            // 
-            btnOpen.HeaderText = "Görüntüle";
-            btnOpen.MinimumWidth = 6;
-            btnOpen.Name = "btnOpen";
-            btnOpen.UseColumnTextForButtonValue = true;
-            btnOpen.Width = 125;
+            dgvDocuments.CellMouseDoubleClick += dgvDocuments_CellMouseDoubleClick;
             // 
             // btnDownload
             // 
             btnDownload.HeaderText = "İndir";
             btnDownload.MinimumWidth = 6;
             btnDownload.Name = "btnDownload";
+            btnDownload.ReadOnly = true;
             btnDownload.UseColumnTextForButtonValue = true;
             btnDownload.Width = 125;
             // 
@@ -337,6 +332,7 @@
             btnDelete.HeaderText = "Sil";
             btnDelete.MinimumWidth = 6;
             btnDelete.Name = "btnDelete";
+            btnDelete.ReadOnly = true;
             btnDelete.UseColumnTextForButtonValue = true;
             btnDelete.Width = 125;
             // 
@@ -386,7 +382,6 @@
         private TextBox txtSearch;
         private Button btnSearch;
         private Label lblRecordCount;
-        private DataGridViewButtonColumn btnOpen;
         private DataGridViewButtonColumn btnDownload;
         private DataGridViewButtonColumn btnDelete;
     }

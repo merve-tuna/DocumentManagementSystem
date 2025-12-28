@@ -24,26 +24,26 @@ namespace DocumentManagementSystem
             this.Close(); 
         }
 
-        //private void FrmOnayBekleyenler_Load(object sender, EventArgs e)
-        //{
-        //    int currentRoleID = GetCurrentUserRoleID(UserSession.UserId);
+        private void FrmOnayBekleyenler_Load(object sender, EventArgs e)
+        {
+            int currentRoleID = GetCurrentUserRoleID(UserSession.UserId);
 
-        //}
-        //private int GetCurrentUserRoleID(int userId)
-        //{
-        //    // Bu metodu UserSession sınıfında static olarak tutman en doğrusu olur.
-        //    // Şimdilik örnek olması için buraya yazıyorum.
-        //    int roleId = 0;
-        //    using (SqlConnection conn = new SqlConnection(connectionString))
-        //    {
-        //        conn.Open();
-        //        SqlCommand cmd = new SqlCommand("SELECT RoleID FROM Users WHERE UserID=@UserID", conn);
-        //        cmd.Parameters.AddWithValue("@UserID", userId);
-        //        object result = cmd.ExecuteScalar();
-        //        if (result != null) roleId = Convert.ToInt32(result);
-        //    }
-        //    return roleId;
-        //}
+        }
+        private int GetCurrentUserRoleID(int userId)
+        {
+            // Bu metodu UserSession sınıfında static olarak tutman en doğrusu olur.
+            // Şimdilik örnek olması için buraya yazıyorum.
+            int roleId = 0;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT RoleID FROM Users WHERE UserID=@UserID", conn);
+                cmd.Parameters.AddWithValue("@UserID", userId);
+                object result = cmd.ExecuteScalar();
+                if (result != null) roleId = Convert.ToInt32(result);
+            }
+            return roleId;
+        }
 
         private void ListPendingDocuments(int roleID)
         {
@@ -125,8 +125,8 @@ namespace DocumentManagementSystem
             MessageBox.Show(onayDurumu ? "Belge yayınlandı." : "Belge reddedildi.");
 
             // Listeyi Yenile
-            //int roleID = GetCurrentUserRoleID(UserSession.UserId);
-            //ListPendingDocuments(roleID);
+            int roleID = GetCurrentUserRoleID(UserSession.UserId);
+            ListPendingDocuments(roleID);
         }
         private void dgvOnayBekleyenler_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {

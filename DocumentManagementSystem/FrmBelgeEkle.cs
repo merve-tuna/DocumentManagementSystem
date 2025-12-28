@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DocumentManagementSystem
 {
@@ -31,7 +32,7 @@ namespace DocumentManagementSystem
             LoadComboBoxes();
             SetupUI();
             this.FormClosing += new FormClosingEventHandler(FrmBelgeEkle_FormClosing);
-            
+
         }
 
         // --- BAŞLANGIÇ AYARLARI ---
@@ -101,6 +102,7 @@ namespace DocumentManagementSystem
 
             try
             {
+
                 // 2. Parametreleri SQL'deki isimlerle BİREBİR EŞLEŞTİRİYORUZ
                 SqlParameter[] p = {
             new SqlParameter("@DocumentName", txtDocName.Text),
@@ -109,8 +111,7 @@ namespace DocumentManagementSystem
             new SqlParameter("@FileSize", new FileInfo(selectedFilePath).Length), // Boyut
             new SqlParameter("@CategoryID", Convert.ToInt32(cmbCategory.SelectedValue)),
             new SqlParameter("@DepartmentID", Convert.ToInt32(cmbDepartment.SelectedValue)),
-            new SqlParameter("@UploadedByUserID", UserSession.UserId),
-            new SqlParameter("@FilePath", selectedFilePath)
+            new SqlParameter("@UploadedByUserID", UserSession.UserId)
         };
 
                 // 3. SqlHelper üzerinden prosedürü çağır
@@ -125,10 +126,10 @@ namespace DocumentManagementSystem
                     hasUnsavedChanges = false;
 
                     // 3. BUTONLARI AYARLA
-                    btnAction.Enabled = false; // Kaydet butonunu İNAKTİF yap (tekrar basamasın)
-                    btnClear.Enabled = true;   // Temizle butonunu AKTİF yap (yeni kayıt için bassın)
+                    btnAction.Enabled = false;
+                    btnDraft.Enabled = false; 
+                    btnClear.Enabled = true; 
 
-                    // 4. Formu KAPATMA (this.Close()'u sildik)
                 }
             }
             catch (Exception ex)
@@ -143,30 +144,29 @@ namespace DocumentManagementSystem
         // --- BUTON TIKLAMALARI ---
         private void btnAction_Click(object sender, EventArgs e)
         {
-            // FrmBelgeEkle.cs içerisindeki Kaydet butonu:
 
-            int initialStatusID = 1; // Varsayılan: Onay Bekliyor
+            int statusID = 1; // Varsayılan (Hata önlemek için)
 
-            // Eğer Admin (1) yüklüyorsa direkt Yayınlandı (2) olsun.
-            // Editör veya Üretici yüklüyorsa Onay Bekliyor (1) kalsın.
-            if (UserSession.UserId == UserSession.ADMIN_ID) // UserSession'daki RoleID kontrolü daha sağlıklı olur
+            // Admin (1) eklerse -> Direkt YAYINDA (4)
+            if (UserSession.UserId == UserSession.ADMIN_ID)
             {
-                initialStatusID = 4; // Yayınlandı
+                statusID = 4;
             }
-            if (UserSession.UserId == UserSession.EDITOR_ID)
+            // Editör (2) eklerse -> ADMİN ONAYI BEKLİYOR (3)
+            else if (UserSession.UserId == UserSession.EDITOR_ID)
             {
-                initialStatusID = 3; // Onay Bekliyor
+                statusID = 3;
             }
-            if (UserSession.UserId == UserSession.URETICI_ID)
+            // Üretici (3) eklerse -> EDİTÖR ONAYI BEKLİYOR (2)
+            else if (UserSession.UserId == UserSession.URETICI_ID)
             {
-                initialStatusID = 2; // Onay Bekliyor
+                statusID = 2;
             }
 
-            // ... SQL INSERT komutuna parametre olarak @StatusID ekle ve initialStatusID değerini gönder ...
-            // cmd.Parameters.AddWithValue("@StatusID", initialStatusID);
-
+            // SaveDocument metoduna bu statusID'yi parametre olarak gönderdiğini varsayıyorum: idye göre alma yok
             SaveDocument();
         }
+
 
         private void btnClear_Click(object sender, EventArgs e)
         {
@@ -179,6 +179,7 @@ namespace DocumentManagementSystem
             lblSelectedFile.ForeColor = Color.Black;
 
             btnAction.Enabled = true;
+            btnDraft.Enabled = true;
             btnClear.Enabled = false;
             hasUnsavedChanges = false;
         }
@@ -186,7 +187,7 @@ namespace DocumentManagementSystem
         // --- FORM KAPATMA ---
         private void button1_Click(object sender, EventArgs e)
         {
-               this.Close();
+            this.Close();
         }
 
         private void FrmBelgeEkle_FormClosing(object sender, FormClosingEventArgs e)
@@ -240,7 +241,6 @@ namespace DocumentManagementSystem
             lblSelectedFile.Visible = true;
         }
 
-        // Boş eventler (Hata vermemesi için kalsın)
         private void panel1_Paint(object sender, PaintEventArgs e) { }
         private void lblSelectedFile_Click(object sender, EventArgs e) { }
         private void label1_Click(object sender, EventArgs e) { }
@@ -250,33 +250,40 @@ namespace DocumentManagementSystem
             // Validasyon: Belge adı zorunludur
             if (string.IsNullOrWhiteSpace(txtDocName.Text))
             {
-                MessageBox.Show("Taslak olarak kaydetmek için en azından Belge Adı girilmelidir.", "Uyarı");
+                MessageBox.Show("Taslak olarak kaydetmek için zorunlu alanlar girilmelidir.", "Uyarı");
                 return;
             }
 
             try
             {
                 SqlParameter[] p = {
-                    new SqlParameter("@DocumentName", txtDocName.Text),
-                    new SqlParameter("@Description", txtDescription.Text),
-                    new SqlParameter("@CategoryID", cmbCategory.SelectedValue),
-                    new SqlParameter("@DepartmentID", cmbDepartment.SelectedValue),
-                    new SqlParameter("@UploadedByUserID", UserSession.UserId)
-                };
+            new SqlParameter("@DocumentName", txtDocName.Text),
+            new SqlParameter("@Description", txtDescription.Text),
+            new SqlParameter("@CategoryID", cmbCategory.SelectedValue ?? DBNull.Value),
+            new SqlParameter("@DepartmentID", cmbDepartment.SelectedValue ?? DBNull.Value),
+            new SqlParameter("@UploadedByUserID", UserSession.UserId)
+        };
 
-                // Yeni prosedürümüzü çağırıyoruz
+                // Prosedürü çağır
                 int result = SqlHelper.ExecuteProcedure("sp_SaveAsDraft", p);
 
-                if (result > 0)
+                if (result != 0)
                 {
-                    MessageBox.Show("Belge taslak olarak kaydedildi.", "Başarılı");
-                    this.Close(); // Kayıt sonrası formu kapat
+                    MessageBox.Show("Kaydedildi.", "Kaydedildi");
+                    hasUnsavedChanges = false;
+
+                    // 3. BUTON DURUMLARINI AYARLA
+                    btnAction.Enabled = false; // Normal kaydet pasif
+                    btnDraft.Enabled = false;  // Taslak kaydet pasif (tekrar basılmasın)
+                    btnClear.Enabled = true;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Kayıt hatası: " + ex.Message);
+                MessageBox.Show("Taslak olarak kaydetmek için zorunlu alanlar girilmelidir.", "Uyarı");
             }
         }
+
+
     }
 }

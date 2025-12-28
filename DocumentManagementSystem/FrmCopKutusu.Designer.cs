@@ -50,6 +50,7 @@
             dgvTrash.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvTrash.Location = new Point(0, 60);
             dgvTrash.Name = "dgvTrash";
+            dgvTrash.ReadOnly = true;
             dgvTrash.RowHeadersWidth = 51;
             dgvTrash.Size = new Size(800, 389);
             dgvTrash.TabIndex = 1;
